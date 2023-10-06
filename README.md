@@ -33,7 +33,7 @@ kotlin {
 
 # Release Notes
 
-- 0.1 Initial release
+- 0.2 Initial release
 
 # License
 ```
