@@ -2,7 +2,7 @@
 
 # 🗂 CSV ️
 
-This is a micro library I wrote for one of my projects and then decided to share with awesome Kotlin community. 
+This micro library was written for one of my projects and then I decided to share with awesome Kotlin community. 
 
 
 There is no documentation for the API which consists of just three methods:
