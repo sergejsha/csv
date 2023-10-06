@@ -2,7 +2,9 @@
 
 # 🗂 CSV ️
 
-This is a micro library I wrote for one of my projects and then decided to share with awesome Kotlin community. It mainly covers my needs and has no documentation. Feel free to add a PR is you miss anything.
+This is a micro library I wrote for one of my projects and then decided to share with awesome Kotlin community. 
+
+It can **parse**, **build** and **generate** CSV text. There is no documentation because the API is expected to be predictable and self-explanatory. Feel free to add a PR if you miss anything.
 
 # Usage
 
