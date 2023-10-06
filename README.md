@@ -5,7 +5,13 @@
 This is a micro library I wrote for one of my projects and then decided to share with awesome Kotlin community. 
 
 
-It can **parse**, **build** and **generate** CSV text. There is no documentation because the API is expected to be predictable and self-explanatory. Feel free to add a PR if you miss anything.
+There is no documentation for the API which consists of just three methods:
+- `parseCsv(csvText: String): Csv`
+- `buildCsv { } : Csv`
+- and `Csv.toCvsText(): String`
+
+
+ Feel free to open PRs for features you miss, please remember keeping API minimalistic, predictable and self-explanatory.
 
 # Usage
 
