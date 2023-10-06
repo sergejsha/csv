@@ -5,7 +5,7 @@ plugins {
 }
 
 group = "de.halfbit"
-version = "0.1-SNAPSHOT"
+version = "0.2"
 
 repositories {
     mavenCentral()
@@ -128,6 +128,13 @@ if (canPublishToMaven) {
 tasks.withType<AbstractPublishToMaven>().configureEach {
     val signingTasks = tasks.withType<Sign>()
     mustRunAfter(signingTasks)
+}
+
+// fix for another dependency issue
+tasks {
+    "compileTestKotlinNative" {
+        mustRunAfter("signNativePublication")
+    }
 }
 
 fun Project.getPropertyOrEmptyString(name: String): String =

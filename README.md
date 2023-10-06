@@ -2,7 +2,36 @@
 
 This is a micro library I wrote for one of my projects and then decided to share with awesome Kotlin community. It mainly covers my needs and has no documentation. Feel free to add a PR is you miss anything.
 
+# Usage
+
+In libs.version.toml
+```toml
+[versions]
+csv = "0.2"
+
+[libraries]
+csv = { module = "de.halfbit:csv", version.ref = "csv" }
+```
+
+In build.gradle.kts
+```kotlin
+kotlin {
+    sourceSets {
+        val commonMain by getting {
+            dependencies {
+                implementation(libs.csv)
+            }
+        }
+    }
+}
+```
+
 # Release
+
+1. Bump version in `build.gradle.kts` of the root project
+2. `./gradlew clean build publishAllPublicationsToCentralRepository`
+
+# Release Notes
 
 - 0.1 Initial release
 
