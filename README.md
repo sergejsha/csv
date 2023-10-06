@@ -55,9 +55,9 @@ You are free to
   - remix, transform, and build upon the material;
   - use the material or its derivative for commercial purposes.
 
-Any distributed derivative work containing this material or its 
-parts (also if modified) must have the attribution notices in form 
-of this license agreement in it.   
+Any distributed derivative work containing this material or parts 
+of it must have the attribution notices in form of this license
+agreement.
 
 The material is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES 
 OR CONDITIONS OF ANY KIND, either express or implied.
