@@ -11,7 +11,7 @@ There is no documentation for the API which consists of just three methods:
 - and `Csv.toCvsText(): String`
 
 
- Feel free to open PRs for features you miss, please remember keeping API minimalistic, predictable and self-explanatory.
+Feel free to open PRs for features you miss, please remember though keeping API minimalistic, predictable and self-explanatory.
 
 # Usage
 
