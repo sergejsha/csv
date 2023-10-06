@@ -8,7 +8,7 @@ This tiny library was written for one of my projects and then I decided to share
 There is no documentation for the API which consists of just three methods:
 - `parseCsv(csvText: String): Csv`
 - `buildCsv { } : Csv`
-- and `Csv.toCvsText(): String`
+- and `Csv.toCsvText(): String`
 
 
 Feel free to open PRs for features you miss, please remember though keeping API minimalistic, predictable and self-explanatory.
