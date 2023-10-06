@@ -4,7 +4,7 @@ This is a micro library I wrote for one of my projects and then decided to share
 
 # Usage
 
-In libs.version.toml
+In gradle/libs.versions.toml
 ```toml
 [versions]
 csv = "0.2"
@@ -13,7 +13,7 @@ csv = "0.2"
 csv = { module = "de.halfbit:csv", version.ref = "csv" }
 ```
 
-In build.gradle.kts
+In shared/build.gradle.kts
 ```kotlin
 kotlin {
     sourceSets {
