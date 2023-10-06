@@ -1,4 +1,4 @@
-# 🗂CSV ️
+# 🗂 CSV ️
 
 This is a micro library I wrote for one of my projects and then decided to share with awesome Kotlin community. It mainly covers my needs and has no documentation. Feel free to add a PR is you miss anything.
 
