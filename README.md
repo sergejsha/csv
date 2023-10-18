@@ -13,7 +13,7 @@ There is no documentation for the API which consists of just three methods:
 
 Feel free to open PRs for features you miss, please remember though keeping API minimalistic, predictable and self-explanatory.
 
-# Usage
+# Dependencies
 
 In gradle/libs.versions.toml
 ```toml
