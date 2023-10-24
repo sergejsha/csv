@@ -58,8 +58,7 @@ You are free to
   - use the material or its derivative for commercial purposes.
 
 Any distributed derivative work containing this material or parts 
-of it must have the attribution notices in form of this license
-agreement.
+of it must have this copyright attribution notices.
 
 The material is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES 
 OR CONDITIONS OF ANY KIND, either express or implied.
