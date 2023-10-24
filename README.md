@@ -2,23 +2,24 @@
 
 # 🗂 CSV ️
 
-This tiny library was written for one of my projects and then I decided to share it with awesome Kotlin community. 
+This tiny library was written for one of my projects, and then shared with awesome Kotlin community. 
 
+# Usage
 
 There is no documentation for the API which consists of just three methods:
 - `parseCsv(csvText: String): Csv`
-- `buildCsv { } : Csv`
-- and `Csv.toCvsText(): String`
+- `buildCsv { row { value("code") } } : Csv`
+- and `Csv.toCsvText(): String`
 
 
 Feel free to open PRs for features you miss, please remember though keeping API minimalistic, predictable and self-explanatory.
 
-# Usage
+# Dependencies
 
 In gradle/libs.versions.toml
 ```toml
 [versions]
-csv = "0.2"
+csv = "0.3"
 
 [libraries]
 csv = { module = "de.halfbit:csv", version.ref = "csv" }
@@ -44,6 +45,7 @@ kotlin {
 
 # Release Notes
 
+- 0.3 Fixed typos in method names
 - 0.2 Initial release
 
 # License

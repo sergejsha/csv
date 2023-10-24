@@ -4,8 +4,7 @@ package de.halfbit.csv
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
-/** Copyright 2023 Halfbit GmbH, Sergej Shafarenka */
-class CvsTest {
+class CsvTest {
 
     @Test
     fun parseCsvWithMixedValues() {
@@ -23,7 +22,7 @@ class CvsTest {
             """.trimIndent()
 
         val csv = parseCsv(givenCsvString)
-        val csvString = csv.toCvsText().trim()
+        val csvString = csv.toCsvText().trim()
 
         assertEquals(givenCsvString, csvString)
     }
@@ -37,7 +36,7 @@ class CvsTest {
             """.trimIndent()
 
         val csv = parseCsv(givenCsvString)
-        val csvString = csv.toCvsText().trim()
+        val csvString = csv.toCsvText().trim()
 
         assertEquals(givenCsvString, csvString)
     }
@@ -51,7 +50,7 @@ class CvsTest {
             """.trimIndent()
 
         val csv = parseCsv(givenCsvString)
-        val csvString = csv.toCvsText().trim()
+        val csvString = csv.toCsvText().trim()
 
         assertEquals(givenCsvString, csvString)
     }
@@ -65,7 +64,7 @@ class CvsTest {
             """.trimIndent()
 
         val csv = parseCsv(givenCsvString)
-        val csvString = csv.toCvsText().trim()
+        val csvString = csv.toCsvText().trim()
 
         assertEquals(givenCsvString, csvString)
     }
@@ -327,7 +326,7 @@ class CvsTest {
             """.trimIndent()
 
         val csv = parseCsv(givenCsvString)
-        val csvString = csv.toCvsText(escapeWhitespaces = true).trim()
+        val csvString = csv.toCsvText(escapeWhitespaces = true).trim()
 
         assertEquals(givenCsvString, csvString)
     }
