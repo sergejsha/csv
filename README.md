@@ -45,6 +45,7 @@ kotlin {
 
 # Release Notes
 
+- 0.4 Fixed description of maven artifacts 
 - 0.3 Fixed typos in method names
 - 0.2 Initial release
 
