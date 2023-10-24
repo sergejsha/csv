@@ -95,7 +95,7 @@ if (canPublishToMaven) {
 
             pom {
                 name.set(rootProject.name)
-                description.set("Concise result type representing success and error values")
+                description.set("Tiny KMP library for parsing, building and generating CSV files")
                 url.set("http://www.halfbit.de")
                 licenses {
                     license {
