@@ -1,4 +1,4 @@
-[![Maven Central](http://img.shields.io/maven-central/v/de.halfbit/csv.svg)](http://search.maven.org/#search%7Cga%7C1%7Cg%3A%22de.halfbit%22%20a%3A%csv%22)
+[![Maven Central](http://img.shields.io/maven-central/v/de.halfbit/csv.svg)](https://central.sonatype.com/artifact/de.halfbit/csv)
 
 # 🗂 CSV ️
 
