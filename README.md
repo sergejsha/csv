@@ -11,8 +11,14 @@ There is no documentation for the API which consists of just three methods:
 
 // 1. Build CSV using mico DSL
 val csv = buildCsv {
-    row { value("Code"); value("Name") }
-    row { value("DE"); value("Germany") }
+    row {
+        value("Code")
+        value("Name")
+    }
+    row {
+        value("DE")
+        value("Germany")
+    }
 }
 
 // 2. Export CSV object to CSV text
