@@ -9,7 +9,7 @@ This tiny library was written for one of my projects, and then shared with aweso
 There is no documentation for the API which consists of just three methods:
 ```kotlin
 
-// 1. Build CSV using mico DSL
+// 1. Build CSV object using simple DSL
 val csv = buildCsv {
     row {
         value("Code")
