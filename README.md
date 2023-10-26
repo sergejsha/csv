@@ -37,7 +37,7 @@ Feel free to open PRs for features you miss, please remember though keeping API 
 In gradle/libs.versions.toml
 ```toml
 [versions]
-csv = "0.3"
+csv = "0.4"
 
 [libraries]
 csv = { module = "de.halfbit:csv", version.ref = "csv" }
