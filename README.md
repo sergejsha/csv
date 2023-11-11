@@ -7,10 +7,28 @@ This tiny library was written for one of my projects, and then shared with aweso
 # Usage
 
 There is no documentation for the API which consists of just three methods:
-- `parseCsv(csvText: String): Csv`
-- `buildCsv { row { value("code") } } : Csv`
-- and `Csv.toCsvText(): String`
+```kotlin
 
+// 1. Build CSV object using simple DSL
+val csv = buildCsv {
+    row {
+        value("Code")
+        value("Name")
+    }
+    row {
+        value("DE")
+        value("Germany")
+    }
+}
+
+// 2. Export CSV object to CSV text
+val csvText = csv.toCsvText()
+
+// 3. Parse CSV text into a CSV object
+val csv2 = parseCsv(csvText)
+
+csv == csv2 // true
+```
 
 Feel free to open PRs for features you miss, please remember though keeping API minimalistic, predictable and self-explanatory.
 
@@ -52,7 +70,7 @@ kotlin {
 
 # License
 ```
-Copyright 2023 Sergej Shafarenka, www.halfbit.de
+Copyright 2023-2024 Sergej Shafarenka, www.halfbit.de
 
 You are free to
   - copy and redistribute the material in any medium or format;
