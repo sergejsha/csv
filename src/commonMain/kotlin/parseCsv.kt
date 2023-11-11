@@ -3,7 +3,7 @@ package de.halfbit.csv
 
 import de.halfbit.csv.Lexer.*
 
-fun parseCsv(csvText: String): Csv {
+public fun parseCsv(csvText: String): Csv {
     var pos = 0
     var lexer: Lexer = BeforeValue
 

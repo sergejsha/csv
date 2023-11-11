@@ -1,60 +1,74 @@
+import org.jetbrains.kotlin.gradle.plugin.mpp.KotlinNativeTargetWithTests
+import org.jetbrains.kotlin.gradle.plugin.mpp.NativeBuildType
+
 plugins {
-    kotlin("multiplatform") version "1.9.10"
+    kotlin("multiplatform") version "1.9.20"
+    id("org.jetbrains.kotlinx.binary-compatibility-validator") version "0.13.2"
     id("maven-publish")
-    signing
+    id("signing")
 }
 
 group = "de.halfbit"
-version = "0.4"
+version = "0.5"
 
 repositories {
     mavenCentral()
 }
 
 kotlin {
+    explicitApi()
+
     jvm {
-        jvmToolchain(17)
-        withJava()
-        testRuns.named("test") {
-            executionTask.configure {
-                useJUnitPlatform()
+        jvm {
+            compilations.all {
+                kotlinOptions.jvmTarget = JavaVersion.VERSION_1_8.toString()
             }
         }
     }
-    js {
-        browser {
-            commonWebpackConfig {
-                cssSupport {
-                    enabled.set(false)
-                }
-            }
-        }
+    linuxX64()
+    mingwX64()
+    macosX64()
+    js(IR) {
+        browser()
+        nodejs()
     }
-    val hostOs = System.getProperty("os.name")
-    val isArm64 = System.getProperty("os.arch") == "aarch64"
-    val isMingwX64 = hostOs.startsWith("Windows")
-    val nativeTarget = when {
-        hostOs == "Mac OS X" && isArm64 -> macosArm64("native")
-        hostOs == "Mac OS X" && !isArm64 -> macosX64("native")
-        hostOs == "Linux" && isArm64 -> linuxArm64("native")
-        hostOs == "Linux" && !isArm64 -> linuxX64("native")
-        isMingwX64 -> mingwX64("native")
-        else -> throw GradleException("Host OS is not supported in Kotlin/Native.")
-    }
-    
+    iosX64()
+    iosArm64()
+    iosSimulatorArm64()
+
     sourceSets {
-        val commonMain by getting
-        val commonTest by getting {
+        commonTest {
             dependencies {
-                implementation(kotlin("test"))
+                implementation(kotlin("test-common"))
+                implementation(kotlin("test-annotations-common"))
             }
         }
-        val jvmMain by getting
-        val jvmTest by getting
-        val jsMain by getting
-        val jsTest by getting
-        val nativeMain by getting
-        val nativeTest by getting
+        jsTest {
+            dependencies {
+                implementation(kotlin("test-js"))
+            }
+        }
+        jvmTest {
+            dependencies {
+                implementation(kotlin("test-junit"))
+            }
+        }
+    }
+
+    // enable running ios tests on a background thread as well
+    // configuration copied from: https://github.com/square/okio/pull/929
+    targets.withType<KotlinNativeTargetWithTests<*>>().all {
+        binaries {
+            // Configure a separate test where code runs in background
+            test("background", setOf(NativeBuildType.DEBUG)) {
+                freeCompilerArgs = freeCompilerArgs + "-trw"
+            }
+        }
+        testRuns {
+            val background by creating {
+                setExecutionSourceFrom(binaries.getTest("background", NativeBuildType.DEBUG))
+            }
+        }
     }
 }
 
@@ -70,7 +84,7 @@ if (canPublishToMaven) {
         repositories {
             maven {
                 name = "local"
-                url = uri("$buildDir/repository")
+                url = uri("${layout.buildDirectory}/repository")
             }
             maven {
                 name = "central"
@@ -113,9 +127,13 @@ if (canPublishToMaven) {
                 scm {
                     connection.set("scm:git:git@github.com:sergejsha/${rootProject.name}.git")
                     developerConnection.set("scm:git:ssh://github.com:sergejsha/${rootProject.name}.git")
-                    url.set("http://www.halfbit.de")
+                    url.set("https://www.halfbit.de")
                 }
             }
+        }
+
+        publications.forEach { publication ->
+            signing.sign(publication)
         }
     }
 
@@ -125,15 +143,27 @@ if (canPublishToMaven) {
 }
 
 // fix for: https://github.com/gradle/gradle/issues/26091
+//          https://youtrack.jetbrains.com/issue/KT-46466 is fixed
 tasks.withType<AbstractPublishToMaven>().configureEach {
-    val signingTasks = tasks.withType<Sign>()
-    mustRunAfter(signingTasks)
+    dependsOn(project.tasks.withType(Sign::class.java))
 }
 
-// fix for another dependency issue
+// more dependencies fixes
 tasks {
-    "compileTestKotlinNative" {
-        mustRunAfter("signNativePublication")
+    "compileTestKotlinIosSimulatorArm64" {
+        mustRunAfter("signIosSimulatorArm64Publication")
+    }
+    "compileTestKotlinIosX64" {
+        mustRunAfter("signIosX64Publication")
+    }
+    "compileTestKotlinLinuxX64" {
+        mustRunAfter("signLinuxX64Publication")
+    }
+    "compileTestKotlinMacosX64" {
+        mustRunAfter("signMacosX64Publication")
+    }
+    "compileTestKotlinMingwX64" {
+        mustRunAfter("signMingwX64Publication")
     }
 }
 

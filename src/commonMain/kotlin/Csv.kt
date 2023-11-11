@@ -1,11 +1,11 @@
 /** Copyright 2023 Halfbit GmbH, Sergej Shafarenka */
 package de.halfbit.csv
 
-class Csv(
-    val rows: List<List<String>>,
+public class Csv(
+    public val rows: List<List<String>>,
 ) {
     // Multiline issue: https://stackoverflow.com/questions/2668678/importing-csv-with-line-breaks-in-excel-2007
-    fun toCsvText(
+    public fun toCsvText(
         newLine: NewLine = NewLine.LF,
         escapeWhitespaces: Boolean = false,
     ): String =
@@ -21,7 +21,9 @@ class Csv(
         }
 }
 
-enum class NewLine(val value: String) {
+public enum class NewLine(
+    public val value: String,
+) {
     LF("\n"),
     CRLF("\r\n")
 }

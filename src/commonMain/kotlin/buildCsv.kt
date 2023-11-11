@@ -2,9 +2,9 @@
 package de.halfbit.csv
 
 @DslMarker
-annotation class CsvDsl
+public annotation class CsvDsl
 
-fun buildCsv(
+public fun buildCsv(
     block: CsvBuilder.() -> Unit
 ): Csv {
     val rows = mutableListOf<List<String>>()
@@ -13,10 +13,10 @@ fun buildCsv(
 }
 
 @CsvDsl
-class CsvBuilder internal constructor(
+public class CsvBuilder internal constructor(
     private val rows: MutableList<List<String>>,
 ) {
-    fun row(block: CsvRowBuilder.() -> Unit) {
+    public fun row(block: CsvRowBuilder.() -> Unit) {
         val row = mutableListOf<String>()
         val scope = CsvRowBuilder(row)
         block(scope)
@@ -25,10 +25,10 @@ class CsvBuilder internal constructor(
 }
 
 @CsvDsl
-class CsvRowBuilder internal constructor(
+public class CsvRowBuilder internal constructor(
     private val row: MutableList<String>,
 ) {
-    fun value(value: String) {
+    public fun value(value: String) {
         row.add(value)
     }
 }

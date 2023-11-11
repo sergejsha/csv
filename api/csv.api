@@ -1,0 +1,35 @@
+public final class de/halfbit/csv/BuildCsvKt {
+	public static final fun buildCsv (Lkotlin/jvm/functions/Function1;)Lde/halfbit/csv/Csv;
+}
+
+public final class de/halfbit/csv/Csv {
+	public fun <init> (Ljava/util/List;)V
+	public final fun getRows ()Ljava/util/List;
+	public final fun toCsvText (Lde/halfbit/csv/NewLine;Z)Ljava/lang/String;
+	public static synthetic fun toCsvText$default (Lde/halfbit/csv/Csv;Lde/halfbit/csv/NewLine;ZILjava/lang/Object;)Ljava/lang/String;
+}
+
+public final class de/halfbit/csv/CsvBuilder {
+	public final fun row (Lkotlin/jvm/functions/Function1;)V
+}
+
+public abstract interface annotation class de/halfbit/csv/CsvDsl : java/lang/annotation/Annotation {
+}
+
+public final class de/halfbit/csv/CsvRowBuilder {
+	public final fun value (Ljava/lang/String;)V
+}
+
+public final class de/halfbit/csv/NewLine : java/lang/Enum {
+	public static final field CRLF Lde/halfbit/csv/NewLine;
+	public static final field LF Lde/halfbit/csv/NewLine;
+	public static fun getEntries ()Lkotlin/enums/EnumEntries;
+	public final fun getValue ()Ljava/lang/String;
+	public static fun valueOf (Ljava/lang/String;)Lde/halfbit/csv/NewLine;
+	public static fun values ()[Lde/halfbit/csv/NewLine;
+}
+
+public final class de/halfbit/csv/ParseCsvKt {
+	public static final fun parseCsv (Ljava/lang/String;)Lde/halfbit/csv/Csv;
+}
+

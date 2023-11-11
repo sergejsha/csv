@@ -19,7 +19,7 @@ Feel free to open PRs for features you miss, please remember though keeping API 
 In gradle/libs.versions.toml
 ```toml
 [versions]
-csv = "0.3"
+csv = "0.5"
 
 [libraries]
 csv = { module = "de.halfbit:csv", version.ref = "csv" }
@@ -45,6 +45,7 @@ kotlin {
 
 # Release Notes
 
+- 0.5 Update to Kotlin 1.9.20
 - 0.4 Fixed description of maven artifacts 
 - 0.3 Fixed typos in method names
 - 0.2 Initial release
