@@ -56,6 +56,30 @@ class CsvTest {
     }
 
     @Test
+    fun parseHeaderWhenNewLineIsRN() {
+
+        val givenCsvString =
+            """
+                NAME,CODE,DESCRIPTION
+                BURGUNDY PINK,4PK.GD-S7,Pink burgundy
+                HILLS PINK,BVH.5-NAR.S8,Pink hills
+            """.trimIndent()
+                .replace("\n", "\r\n")
+
+        val csv = parseCsv(givenCsvString)
+        val header = csv.rows[0]
+
+        val nameIndex = header.indexOf("NAME")
+        assertEquals(0, nameIndex)
+
+        val codeIndex = header.indexOf("CODE")
+        assertEquals(1, codeIndex)
+
+        val descriptionIndex = header.indexOf("DESCRIPTION")
+        assertEquals(2, descriptionIndex)
+    }
+
+    @Test
     fun parseSingleLineQuotedAtStartCsv() {
 
         val givenCsvString =

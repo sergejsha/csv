@@ -2,14 +2,14 @@ import org.jetbrains.kotlin.gradle.plugin.mpp.KotlinNativeTargetWithTests
 import org.jetbrains.kotlin.gradle.plugin.mpp.NativeBuildType
 
 plugins {
-    kotlin("multiplatform") version "1.9.20"
+    kotlin("multiplatform") version "1.9.22"
     id("org.jetbrains.kotlinx.binary-compatibility-validator") version "0.13.2"
     id("maven-publish")
     id("signing")
 }
 
 group = "de.halfbit"
-version = "0.5"
+version = "0.6"
 
 repositories {
     mavenCentral()

@@ -64,6 +64,20 @@ public fun parseCsv(csvText: String): Csv {
                             completeValue()
                             BeforeValue
                         }
+                        '\r' -> {
+                            when(nextChar()) {
+                                '\n'-> {
+                                    pos++
+                                    InsideValue
+                                }
+                                else -> {
+                                    pos++
+                                    completeValue()
+                                    completeRow()
+                                    BeforeValue
+                                }
+                            }
+                        }
                         '\n' -> {
                             pos++
                             completeValue()
