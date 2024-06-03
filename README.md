@@ -63,8 +63,9 @@ kotlin {
 
 # Release Notes
 
-- 0.6 Fix parsing of CRLF files, update to Kotlin 1.9.22
-- 0.5 Update to Kotlin 1.9.20
+- 0.7 Fixed issue #1
+- 0.6 Fixed parsing of CRLF files, update to Kotlin 1.9.22
+- 0.5 Updated to Kotlin 1.9.20
 - 0.4 Fixed description of maven artifacts 
 - 0.3 Fixed typos in method names
 - 0.2 Initial release
