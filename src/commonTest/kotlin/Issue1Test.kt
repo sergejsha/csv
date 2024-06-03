@@ -2,6 +2,7 @@
 package de.halfbit.csv
 
 import kotlin.test.Test
+import kotlin.test.assertContentEquals
 import kotlin.test.assertEquals
 
 class Issue1Test {
@@ -18,6 +19,6 @@ class Issue1Test {
 
         val csv = parseCsv(givenCsvString)
         assertEquals(3, csv.rows.size)
-        arrayOf("1999", "Chevy", "Venture", "")
+        assertContentEquals(listOf("1999", "Chevy", "Venture", ""), csv.rows[2])
     }
 }
