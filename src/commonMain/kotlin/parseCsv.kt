@@ -62,11 +62,17 @@ public fun parseCsv(csvText: String): Csv {
                         ',' -> {
                             pos++
                             completeValue()
+                            when (nextChar()) {
+                                null -> { // EOF
+                                    completeValue()
+                                    completeRow()
+                                }
+                            }
                             BeforeValue
                         }
                         '\r' -> {
-                            when(nextChar()) {
-                                '\n'-> {
+                            when (nextChar()) {
+                                '\n' -> {
                                     pos++
                                     InsideValue
                                 }
