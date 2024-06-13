@@ -9,7 +9,7 @@ This tiny library was written for one of my projects, and then shared with aweso
 There is no documentation for the API which consists of just three methods:
 ```kotlin
 
-// 1. Build CSV object using simple DSL
+// Build CSV object using simple DSL
 val csv = buildCsv {
     row {
         value("Code")
@@ -21,23 +21,23 @@ val csv = buildCsv {
     }
 }
 
-// 2. Export CSV object to CSV text
+// Export CSV object to CSV text
 val csvText = csv.toCsvText()
 
-// 3. Parse CSV text into a CSV object
+// Parse CSV text into a CSV object
 val csv2 = parseCsv(csvText)
 
 csv == csv2 // true
 ```
 
-Feel free to open PRs for features you miss, please remember though keeping API minimalistic, predictable and self-explanatory.
+Feel free to open PRs for features you miss, please remember keeping API minimalistic, predictable and self-explanatory.
 
 # Dependencies
 
 In gradle/libs.versions.toml
 ```toml
 [versions]
-csv = "0.5"
+csv = "0.7"
 
 [libraries]
 csv = { module = "de.halfbit:csv", version.ref = "csv" }
