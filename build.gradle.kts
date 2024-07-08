@@ -1,15 +1,14 @@
-import org.jetbrains.kotlin.gradle.plugin.mpp.KotlinNativeTargetWithTests
-import org.jetbrains.kotlin.gradle.plugin.mpp.NativeBuildType
+import org.jetbrains.kotlin.gradle.dsl.JvmTarget
+import org.jetbrains.kotlin.gradle.tasks.KotlinJvmCompile
 
 plugins {
-    kotlin("multiplatform") version "1.9.22"
-    id("org.jetbrains.kotlinx.binary-compatibility-validator") version "0.13.2"
+    alias(libs.plugins.kotlin.multiplatform)
     id("maven-publish")
     id("signing")
 }
 
 group = "de.halfbit"
-version = "0.7"
+version = "0.8"
 
 repositories {
     mavenCentral()
@@ -17,19 +16,19 @@ repositories {
 
 kotlin {
     explicitApi()
-
-    jvm {
-        jvm {
-            compilations.all {
-                kotlinOptions.jvmTarget = JavaVersion.VERSION_1_8.toString()
-            }
-        }
-    }
+    jvm()
     linuxX64()
     mingwX64()
     macosX64()
-    js(IR) {
-        browser()
+    js {
+        browser {
+            testTask {
+                useKarma {
+                    useChromeHeadless()
+                    useFirefox()
+                }
+            }
+        }
         nodejs()
     }
     iosX64()
@@ -39,36 +38,15 @@ kotlin {
     sourceSets {
         commonTest {
             dependencies {
-                implementation(kotlin("test-common"))
-                implementation(kotlin("test-annotations-common"))
-            }
-        }
-        jsTest {
-            dependencies {
-                implementation(kotlin("test-js"))
-            }
-        }
-        jvmTest {
-            dependencies {
-                implementation(kotlin("test-junit"))
+                implementation(libs.kotlin.test)
             }
         }
     }
+}
 
-    // enable running ios tests on a background thread as well
-    // configuration copied from: https://github.com/square/okio/pull/929
-    targets.withType<KotlinNativeTargetWithTests<*>>().all {
-        binaries {
-            // Configure a separate test where code runs in background
-            test("background", setOf(NativeBuildType.DEBUG)) {
-                freeCompilerArgs = freeCompilerArgs + "-trw"
-            }
-        }
-        testRuns {
-            val background by creating {
-                setExecutionSourceFrom(binaries.getTest("background", NativeBuildType.DEBUG))
-            }
-        }
+tasks.withType<KotlinJvmCompile>().configureEach {
+    compilerOptions {
+        jvmTarget.set(JvmTarget.JVM_1_8)
     }
 }
 
@@ -155,6 +133,9 @@ tasks {
     }
     "compileTestKotlinIosX64" {
         mustRunAfter("signIosX64Publication")
+    }
+    "compileTestKotlinIosArm64" {
+        mustRunAfter("signIosArm64Publication")
     }
     "compileTestKotlinLinuxX64" {
         mustRunAfter("signLinuxX64Publication")

@@ -3,12 +3,14 @@ build/
 !gradle/wrapper/gradle-wrapper.jar
 !**/src/main/**/build/
 !**/src/test/**/build/
+.kotlin/
 
 ### IntelliJ IDEA ###
 .idea/artifacts
 .idea/modules.xml
 .idea/jarRepositories.xml
 .idea/compiler.xml
+.idea/misc.xml
 .idea/libraries/
 *.iws
 *.iml
