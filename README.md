@@ -63,6 +63,7 @@ kotlin {
 
 # Release Notes
 
+- 0.8 Update to Kotlin 2.0.0
 - 0.7 Fixed issue #1
 - 0.6 Fixed parsing of CRLF files, update to Kotlin 1.9.22
 - 0.5 Updated to Kotlin 1.9.20
