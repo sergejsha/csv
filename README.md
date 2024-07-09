@@ -37,10 +37,14 @@ Feel free to open PRs for features you miss, please remember keeping API minimal
 In `gradle/libs.versions.toml`
 ```toml
 [versions]
+kotlin = "2.0.0"
 csv = "0.8"
 
 [libraries]
 csv = { module = "de.halfbit:csv", version.ref = "csv" }
+
+[plugins]
+kotlin-multiplatform = { id = "org.jetbrains.kotlin.multiplatform", version.ref = "kotlin" }
 ```
 
 In `shared/build.gradle.kts`
