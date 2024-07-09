@@ -45,12 +45,14 @@ csv = { module = "de.halfbit:csv", version.ref = "csv" }
 
 In shared/build.gradle.kts
 ```kotlin
+plugins {
+    alias(libs.plugins.kotlin.multiplatform)
+}
+
 kotlin {
     sourceSets {
-        val commonMain by getting {
-            dependencies {
-                implementation(libs.csv)
-            }
+        commonMain.dependencies {
+            implementation(libs.csv)
         }
     }
 }
