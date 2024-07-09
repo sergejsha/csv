@@ -34,7 +34,7 @@ Feel free to open PRs for features you miss, please remember keeping API minimal
 
 # Dependencies
 
-In gradle/libs.versions.toml
+In `gradle/libs.versions.toml`
 ```toml
 [versions]
 csv = "0.8"
@@ -43,7 +43,7 @@ csv = "0.8"
 csv = { module = "de.halfbit:csv", version.ref = "csv" }
 ```
 
-In shared/build.gradle.kts
+In `shared/build.gradle.kts`
 ```kotlin
 plugins {
     alias(libs.plugins.kotlin.multiplatform)
