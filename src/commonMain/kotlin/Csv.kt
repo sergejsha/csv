@@ -8,17 +8,18 @@ public class Csv(
     public fun toCsvText(
         newLine: NewLine = NewLine.LF,
         escapeWhitespaces: Boolean = false,
-    ): String =
-        rows.fold("") { acc, row ->
-            val rowText =
-                row
-                    .fold("") { rowAcc, value ->
-                        val escapedValue = value.escapeCsvValue(escapeWhitespaces)
-                        "$rowAcc$escapedValue,"
-                    }
-                    .removeSuffix(",")
-            "$acc$rowText${newLine.value}"
+    ): String = buildString {
+        rows.forEach { row ->
+            row.forEachIndexed { index, value ->
+                val escapedValue = value.escapeCsvValue(escapeWhitespaces)
+                append(escapedValue)
+                if (index < (row.size - 1)) {
+                    append(',')
+                }
+            }
+            append(newLine.value)
         }
+    }
 }
 
 public enum class NewLine(
