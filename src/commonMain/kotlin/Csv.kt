@@ -13,7 +13,7 @@ public class Csv(
             row.forEachIndexed { index, value ->
                 val escapedValue = value.escapeCsvValue(escapeWhitespaces)
                 append(escapedValue)
-                if (index < (row.size - 1)) {
+                if (index < row.lastIndex) {
                     append(',')
                 }
             }
