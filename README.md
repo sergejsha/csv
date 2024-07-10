@@ -24,9 +24,10 @@ val csv = buildCsv {
 // Export CSV object to CSV text
 val csvText = csv.toCsvText()
 
-// Parse CSV text into a CSV object
+// Parse CSV text to get a CSV object
 val csv2 = parseCsv(csvText)
 
+// Compare created and parsed objects
 csv == csv2 // true
 ```
 
@@ -38,7 +39,7 @@ In `gradle/libs.versions.toml`
 ```toml
 [versions]
 kotlin = "2.0.0"
-csv = "0.8"
+csv = "0.9"
 
 [libraries]
 csv = { module = "de.halfbit:csv", version.ref = "csv" }
@@ -69,6 +70,7 @@ kotlin {
 
 # Release Notes
 
+- 0.9 Improve performance for CSV generation (PR #4)
 - 0.8 Update to Kotlin 2.0.0
 - 0.7 Fixed issue #1
 - 0.6 Fixed parsing of CRLF files, update to Kotlin 1.9.22
