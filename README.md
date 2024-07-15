@@ -40,7 +40,7 @@ In `gradle/libs.versions.toml`
 ```toml
 [versions]
 kotlin = "2.0.0"
-csv = "0.9"
+csv = "0.10"
 
 [libraries]
 csv = { module = "de.halfbit:csv", version.ref = "csv" }
@@ -71,6 +71,7 @@ kotlin {
 
 # Release Notes
 
+- 0.10 Migrate to the Apache 2.0 license
 - 0.9 Improve performance of CSV generation (PR #4)
 - 0.8 Update to Kotlin 2.0.0
 - 0.7 Fixed issue #1
