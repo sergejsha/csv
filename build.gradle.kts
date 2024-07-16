@@ -24,8 +24,7 @@ kotlin {
         browser {
             testTask {
                 useKarma {
-                    useChromeHeadless()
-                    useFirefox()
+                    useFirefoxHeadless()
                 }
             }
         }
@@ -87,8 +86,8 @@ if (canPublishToMaven) {
 
             pom {
                 name.set(rootProject.name)
-                description.set("Tiny KMP library for parsing, building and generating CSV files")
-                url.set("http://www.halfbit.de")
+                description.set("Tiny Kotlin Multiplatform library for building and exporting CSV files")
+                url.set("https://www.halfbit.de")
                 licenses {
                     license {
                         name.set("Apache-2.0")
@@ -118,34 +117,34 @@ if (canPublishToMaven) {
     signing {
         sign(publishing.publications)
     }
+
+    // more dependencies fixes
+    tasks {
+        "compileTestKotlinIosSimulatorArm64" {
+            mustRunAfter("signIosSimulatorArm64Publication")
+        }
+        "compileTestKotlinIosX64" {
+            mustRunAfter("signIosX64Publication")
+        }
+        "compileTestKotlinIosArm64" {
+            mustRunAfter("signIosArm64Publication")
+        }
+        "compileTestKotlinLinuxX64" {
+            mustRunAfter("signLinuxX64Publication")
+        }
+        "compileTestKotlinMacosX64" {
+            mustRunAfter("signMacosX64Publication")
+        }
+        "compileTestKotlinMingwX64" {
+            mustRunAfter("signMingwX64Publication")
+        }
+    }
 }
 
 // fix for: https://github.com/gradle/gradle/issues/26091
 //          https://youtrack.jetbrains.com/issue/KT-46466 is fixed
 tasks.withType<AbstractPublishToMaven>().configureEach {
     dependsOn(project.tasks.withType(Sign::class.java))
-}
-
-// more dependencies fixes
-tasks {
-    "compileTestKotlinIosSimulatorArm64" {
-        mustRunAfter("signIosSimulatorArm64Publication")
-    }
-    "compileTestKotlinIosX64" {
-        mustRunAfter("signIosX64Publication")
-    }
-    "compileTestKotlinIosArm64" {
-        mustRunAfter("signIosArm64Publication")
-    }
-    "compileTestKotlinLinuxX64" {
-        mustRunAfter("signLinuxX64Publication")
-    }
-    "compileTestKotlinMacosX64" {
-        mustRunAfter("signMacosX64Publication")
-    }
-    "compileTestKotlinMingwX64" {
-        mustRunAfter("signMingwX64Publication")
-    }
 }
 
 fun Project.getPropertyOrEmptyString(name: String): String =

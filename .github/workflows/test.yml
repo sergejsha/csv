@@ -1,0 +1,59 @@
+name: Check
+
+permissions:
+    checks: write
+
+on:
+    pull_request:
+        paths-ignore:
+            - 'documentation/**'
+            - '*.md'
+    push:
+        branches:
+            - master
+        paths-ignore:
+            - 'documentation/**'
+            - '*.md'
+
+jobs:
+    test:
+        name: Run tests
+
+        strategy:
+            matrix:
+                include:
+                    - os: ubuntu-latest
+                      task: jvm
+                    - os: ubuntu-latest
+                      task: jsBrowser
+                    - os: ubuntu-latest
+                      task: jsNode
+                    - os: macos-latest
+                      task: iosSimulatorArm64
+
+        runs-on: ${{ matrix.os }}
+        steps:
+            - name: Checkout
+              uses: actions/checkout@v4
+
+            - name: Setup JDK 17
+              uses: actions/setup-java@v4
+              with:
+                  distribution: 'adopt'
+                  java-version: '17'
+
+            - name: Setup Firefox browser
+              if: matrix.task == 'jsBrowser'
+              uses: browser-actions/setup-firefox@v1
+            - run: firefox --version
+              if: matrix.task == 'jsBrowser'
+
+            - name: Run ${{ matrix.task }} test
+              run: ./gradlew ${{ matrix.task }}Test --stacktrace
+
+            - name: Publish ${{ matrix.task }} report
+              uses: mikepenz/action-junit-report@v4
+              if: success() || failure()
+              with:
+                  check_name: ${{ matrix.task }}
+                  report_paths: "build/test-results/${{ matrix.task }}Test/TEST-*.xml"
