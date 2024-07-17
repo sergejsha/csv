@@ -64,7 +64,7 @@ kotlin {
 }
 ```
 
-# Publishing
+# Releasing
 
 1. Bump version in `build.gradle.kts` of the root project
 2. `./gradlew clean build publishAllPublicationsToCentralRepository`
