@@ -1,0 +1,19 @@
+@startuml
+skinparam packageStyle rectangle
+hide empty members
+hide stereotype
+hide circle
+
+class Csv {
+    toCsvText(): String
+}
+
+package "Top-level functions" {
+    class "buildCsv(DSL): Csv" as buildCsv
+    class "parseCsv(String): Csv" as parseCsv
+}
+
+buildCsv .[dotted].> Csv : produces
+parseCsv .[dotted].> Csv : produces
+
+@enduml
