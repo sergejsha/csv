@@ -3,7 +3,7 @@
 
 # 🗂 CSV ️
 
-This tiny library was written for one of my projects, and then shared with awesome Kotlin community. 
+Small and fast CSV parser and generator written for one of my projects, and then shared with awesome Kotlin community.
 
 ![Architecture diagram](http://www.plantuml.com/plantuml/proxy?src=https://raw.githubusercontent.com/sergejsha/csv/master/documentation/architecture.v1.iuml)
 
