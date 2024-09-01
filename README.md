@@ -41,7 +41,7 @@ Feel free to open PRs for features you miss, please remember keeping API minimal
 In `gradle/libs.versions.toml`
 ```toml
 [versions]
-kotlin = "2.0.0"
+kotlin = "2.0.20"
 csv = "0.11"
 
 [libraries]
