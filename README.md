@@ -73,6 +73,7 @@ kotlin {
 
 # Release Notes
 
+- 0.11 Update to Kotlin 2.0.20
 - 0.10 Migrate to the Apache 2.0 license
 - 0.9 Improve performance of CSV generation (PR #4)
 - 0.8 Update to Kotlin 2.0.0
