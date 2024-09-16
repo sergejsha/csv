@@ -22,6 +22,10 @@ val csv = buildCsv {
         value("DE")
         value("Germany")
     }
+    row {
+        value("BY")
+        value("BELARUS")
+    }
 }
 
 // Export CSV object to CSV text
@@ -30,8 +34,14 @@ val csvText = csv.toCsvText()
 // Parse CSV text to get a CSV object
 val csv2 = parseCsv(csvText)
 
-// Compare created and parsed objects
-csv == csv2 // true
+// Data structure
+val allRows: List<Row> = csv.rows
+val header: HeaderRow? = csv.header
+val data: List<DataRow> = csv.data
+
+// Transform CSV
+val codes = data.mapNotNull { it.value("Code") } // ["DE", "BY"]
+val names = data.mapNotNull { it.value("Name") } // ["Germany", "Belarus"]
 ```
 
 Feel free to open PRs for features you miss, please remember keeping API minimalistic, predictable and self-explanatory.
@@ -42,7 +52,7 @@ In `gradle/libs.versions.toml`
 ```toml
 [versions]
 kotlin = "2.0.20"
-csv = "0.11"
+csv = "0.12"
 
 [libraries]
 csv = { module = "de.halfbit:csv", version.ref = "csv" }
@@ -73,6 +83,7 @@ kotlin {
 
 # Release Notes
 
+- 0.12 Add HeaderRow and DataRow types, enabling easier data transformations
 - 0.11 Update to Kotlin 2.0.20
 - 0.10 Migrate to the Apache 2.0 license
 - 0.9 Improve performance of CSV generation (PR #4)

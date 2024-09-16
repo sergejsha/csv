@@ -8,7 +8,7 @@ plugins {
 }
 
 group = "de.halfbit"
-version = "0.12-SNAPSHOT"
+version = "0.12"
 
 repositories {
     mavenCentral()
