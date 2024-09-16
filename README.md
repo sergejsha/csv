@@ -35,9 +35,9 @@ val csvText = csv.toCsvText()
 val csv2 = parseCsv(csvText)
 
 // Data structure
-val allRows: List<Row> = csv.rows
-val header: HeaderRow? = csv.header
-val data: List<DataRow> = csv.data
+val allRows: List<Row> = csv2.rows
+val header: HeaderRow? = csv2.header
+val data: List<DataRow> = csv2.data
 
 // Transform CSV
 val codes = data.mapNotNull { it.value("Code") } // ["DE", "BY"]
