@@ -5,7 +5,7 @@
 
 Small, fast and convenient multplatform CSV parser and builder written for one of my projects, and then shared with awesome Kotlin community.
 
-![Architecture diagram](http://www.plantuml.com/plantuml/proxy?src=https://raw.githubusercontent.com/sergejsha/csv/master/documentation/architecture.v1.iuml)
+![Architecture diagram](https://www.plantuml.com/plantuml/svg/VP3DRi8m48JlVefLJkaXF42400aEhOHQgN2hUZ3s0XR-YUmrFofzzpe_Ld9gBjcTp3Uhp2eGznIDPk6YRCCzDz1mSU4dtD538tWKnEr98pihYO2ceGSOD0VqePS2eKT7ZsQm2EL5iZEXUGYm3bVuOP2UCtA9leRNxltfRijEbfnu3LiLQBv9Oz8NdKukeNkyK_bImuwyiYVsEwIE6KEsiXBl7yUrqz7OqdA3cKdmcwMHx6zaxifrn59qsFkKoiDo97ighKC_KEnTKscyeePZj8AKiw4OWdkaE4IbPVgFShFRfimq5S03P7bgJTq7RAtzuOaxVsblPn9cNz8HeVoUBRgEQsYyar5WODd_duUD3LRItMprN41QM2lCdrLigjmKQqdNco1JKtLqiXLQ6Ot-0m00)
 
 # Usage
 
