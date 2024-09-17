@@ -5,8 +5,21 @@ hide stereotype
 hide circle
 
 class Csv {
+    header: HeaderRow?
+    data: List<DataRow>
     toCsvText(): String
 }
+
+class HeaderRow {
+    indexOfColumn(name: String): Int
+}
+
+class DataRow {
+    value(columnName: String): String?
+}
+
+class Row
+class List<String>
 
 package "Top-level functions" {
     class "buildCsv(DSL): Csv" as buildCsv
@@ -15,5 +28,11 @@ package "Top-level functions" {
 
 buildCsv .[dotted].> Csv : produces
 parseCsv .[dotted].> Csv : produces
+
+HeaderRow -right-|> Row
+DataRow -left-|> Row
+Row -down-|> List
+Csv o-down- "0..1" HeaderRow
+Csv o-down- "0..n" DataRow
 
 @enduml
