@@ -1,6 +1,8 @@
 [![Maven Central](http://img.shields.io/maven-central/v/de.halfbit/csv.svg)](https://central.sonatype.com/artifact/de.halfbit/csv)
 ![maintenance-status](https://img.shields.io/badge/maintenance-passively--maintained-yellowgreen.svg)
 
+PR's are welcome!
+
 # 🗂 CSV ️
 
 Small, fast and convenient multplatform CSV parser and builder written for one of my projects, and then shared with awesome Kotlin community.
