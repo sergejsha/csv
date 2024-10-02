@@ -118,14 +118,14 @@ internal class DefaultDataRow(
         row.getOrNull(header.indexOfColumn(columnName))
 
     override fun replaceValue(columnName: String, newValue: String): DataRow {
-        val thisRow = this
         val replaceIndex = header.indexOfColumn(columnName)
+        if (replaceIndex < 0) return this
         val newRow = buildList {
-            for (index in 0..max(thisRow.size, replaceIndex)) {
+            for (index in 0..max(row.lastIndex, replaceIndex)) {
                 if (index == replaceIndex) {
                     add(newValue)
                 } else {
-                    add(thisRow.getOrNull(index) ?: "")
+                    add(row.getOrNull(index) ?: "")
                 }
             }
         }

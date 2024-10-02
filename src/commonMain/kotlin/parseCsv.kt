@@ -78,18 +78,15 @@ internal fun parseCsv(csvText: String): Csv {
                             BeforeValue
                         }
                         '\r' -> {
+                            pos++
                             when (nextChar()) {
                                 '\n' -> {
                                     pos++
-                                    InsideValue
-                                }
-                                else -> {
-                                    pos++
-                                    completeValue()
-                                    completeRow()
-                                    BeforeValue
                                 }
                             }
+                            completeValue()
+                            completeRow()
+                            BeforeValue
                         }
                         '\n' -> {
                             pos++

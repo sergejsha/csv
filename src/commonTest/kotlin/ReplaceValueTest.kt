@@ -10,10 +10,13 @@ class ReplaceValueTest {
 
         val givenCsvString =
             """
-                NAME,CODE,DESCRIPTION
-                BURGUNDY PINK,4PK.GD-S7,Pink burgundy
-                HILLS PINK,BVH.5-NAR.S8,Pink hills
-                PACKAGING,PKG.1,"Models: A, B, C"
+                NAME,CODE,PRICE,DESCRIPTION
+                BURGUNDY PINK,4PK.GD-S7,100,Pink burgundy
+                HILLS PINK,BVH.5-NAR.S8,120Pink hills
+                PACKAGING,PKG.1,0.55,Eyewear packages. Models: all
+                DARK BLUE,EVG.6,101,"Matte stainless steel. 
+                Line 2.
+                Line 3"
             """.trimIndent()
 
         val csv = Csv.parserText(givenCsvString)
@@ -26,11 +29,11 @@ class ReplaceValueTest {
             }
 
         val csv2 = Csv(csv.header, data)
-        println(csv2)
+        println(csv2.toCsvText())
 
         assertEquals("", csv2.data[0].description)
         assertEquals("", csv2.data[1].description)
-        assertEquals("Models: A, B, C", csv2.data[2].description)
+        assertEquals("Eyewear packages. Models: all", csv2.data[2].description)
     }
 }
 
