@@ -16,7 +16,7 @@ class ReplaceValueTest {
                 PACKAGING,PKG.1,"Models: A, B, C"
             """.trimIndent()
 
-        val csv = Csv.fromText(givenCsvString)
+        val csv = Csv.parserText(givenCsvString)
         val data = csv.data
             .map {
                 val code = it.code

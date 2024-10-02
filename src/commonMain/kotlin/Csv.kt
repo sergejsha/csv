@@ -52,13 +52,13 @@ public interface Csv : BaseCsv {
     }
 
     public companion object {
-        public fun fromText(csvText: String): Csv = parseCsv(csvText)
+        public fun parserText(csvText: String): Csv = parseCsv(csvText)
 
-        public fun fromList(allRows: List<List<String>>): BaseCsv {
+        public fun fromLists(allRows: List<List<String>>): BaseCsv {
             return BaseCsv(allRows.map { DefaultRow(it) })
         }
 
-        public fun fromList(header: List<String>, data: List<List<String>>): Csv {
+        public fun fromLists(header: List<String>, data: List<List<String>>): Csv {
             val headerRow = DefaultHeaderRow(header)
             return Csv(
                 header = headerRow,
