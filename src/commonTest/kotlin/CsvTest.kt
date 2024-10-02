@@ -67,7 +67,7 @@ class CsvTest {
                 .replace("\n", "\r\n")
 
         val csv = parseCsv(givenCsvString)
-        val header = csv.rows[0]
+        val header = csv.allRows[0]
 
         val nameIndex = header.indexOf("NAME")
         assertEquals(0, nameIndex)

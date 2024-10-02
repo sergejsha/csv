@@ -1,33 +1,23 @@
 /** Copyright 2023 Halfbit GmbH, Sergej Shafarenka */
 package de.halfbit.csv
 
-public class Csv(
-    public val header: HeaderRow?,
-    public val data: List<DataRow>,
-) {
-    public val rows: List<Row> by lazy {
-        buildList {
-            header?.let { add(it) }
-            addAll(data)
-        }
-    }
+import de.halfbit.csv.BaseCsv.Row
 
-    public sealed interface Row : List<String>
-
-    public interface HeaderRow : Row {
-        public fun indexOfColumn(name: String): Int
-    }
-
-    public interface DataRow : Row {
-        public fun value(columnName: String): String?
-    }
+/**
+ * Object with comma-separated values stored as list of [Row]'s. Each row is a list
+ * of strings. Empty values are empty strings.
+ *
+ * If your CSV-data has header row, use [BaseCsv] instead of this base type.
+ */
+public interface BaseCsv {
+    public val allRows: List<Row>
 
     // Multiline issue: https://stackoverflow.com/questions/2668678/importing-csv-with-line-breaks-in-excel-2007
     public fun toCsvText(
         newLine: NewLine = NewLine.LF,
         escapeWhitespaces: Boolean = false,
     ): String = buildString {
-        rows.forEach { row ->
+        allRows.forEach { row ->
             row.forEachIndexed { index, value ->
                 val escapedValue = value.escapeCsvValue(escapeWhitespaces)
                 append(escapedValue)
@@ -39,16 +29,43 @@ public class Csv(
         }
     }
 
-    override fun toString(): String =
-        buildString {
-            append(header)
-            append("\n")
-            data.forEach { data ->
-                append(data)
-                append("\n")
-            }
+    public interface Row : List<String> {
+        public fun replaceValue(valueIndex: Int, newValue: String): Row
+    }
+}
+
+/**
+ * CSV-object  by with a mandatory header row. It has more convenient methods
+ * for working with columns by their names.
+ */
+public interface Csv : BaseCsv {
+    public val header: HeaderRow
+    public val data: List<DataRow>
+
+    public interface HeaderRow : Row {
+        public fun indexOfColumn(name: String): Int
+    }
+
+    public interface DataRow : Row {
+        public fun value(columnName: String): String?
+        public fun replaceValue(columnName: String, newValue: String): DataRow
+    }
+
+    public companion object {
+        public fun fromText(csvText: String): Csv = parseCsv(csvText)
+
+        public fun fromList(allRows: List<List<String>>): BaseCsv {
+            return BaseCsv(allRows.map { DefaultRow(it) })
         }
 
+        public fun fromList(header: List<String>, data: List<List<String>>): Csv {
+            val headerRow = DefaultHeaderRow(header)
+            return Csv(
+                header = headerRow,
+                data = data.map { DefaultDataRow(it, headerRow) },
+            )
+        }
+    }
 }
 
 public enum class NewLine(
