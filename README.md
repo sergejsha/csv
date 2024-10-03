@@ -1,7 +1,7 @@
 [![Maven Central](http://img.shields.io/maven-central/v/de.halfbit/csv.svg)](https://central.sonatype.com/artifact/de.halfbit/csv)
 ![maintenance-status](https://img.shields.io/badge/maintenance-passively--maintained-yellowgreen.svg)
 
-PR's are welcome!
+Feel free to open PRs for features you miss, please remember keeping API minimalistic, predictable and self-explanatory.
 
 # 🗂 CSV ️
 
@@ -38,15 +38,13 @@ val csv2 = Csv.parseText(csvText)
 
 // Data structure
 val allRows: List<Row> = csv2.rows
-val header: HeaderRow? = csv2.header
+val header: HeaderRow = csv2.header
 val data: List<DataRow> = csv2.data
 
 // Transform CSV
 val codes = data.map { it.value("Code") } // ["DE", "BY"]
 val names = data.map { it.value("Name") } // ["Germany", "Belarus"]
 ```
-
-Feel free to open PRs for features you miss, please remember keeping API minimalistic, predictable and self-explanatory.
 
 # Dependencies
 
@@ -85,7 +83,7 @@ kotlin {
 
 # Release Notes
 
-- 0.13  See PR #13 for details.
+- 0.13 Some API changes and DataRow.replaceValue(). See PR #13 for details.
 - 0.12 Add HeaderRow and DataRow types, enabling easier data transformations
 - 0.11 Update to Kotlin 2.0.20
 - 0.10 Migrate to the Apache 2.0 license
