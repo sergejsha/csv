@@ -47,7 +47,7 @@ public interface Csv : BaseCsv {
     }
 
     public interface DataRow : Row {
-        public fun value(columnName: String): String?
+        public fun value(columnName: String): String
         public fun replaceValue(columnName: String, newValue: String): DataRow
     }
 

@@ -114,8 +114,8 @@ internal class DefaultDataRow(
     private val header: HeaderRow
 ) : DataRow, DefaultRow(row) {
 
-    override fun value(columnName: String): String? =
-        row.getOrNull(header.indexOfColumn(columnName))
+    override fun value(columnName: String): String =
+        row.getOrNull(header.indexOfColumn(columnName)) ?: ""
 
     override fun replaceValue(columnName: String, newValue: String): DataRow {
         val replaceIndex = header.indexOfColumn(columnName)

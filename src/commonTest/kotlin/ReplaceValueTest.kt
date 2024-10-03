@@ -38,7 +38,7 @@ class ReplaceValueTest {
 }
 
 private val Csv.DataRow.code: String
-    get() = value("CODE") ?: ""
+    get() = value("CODE")
 
 private val Csv.DataRow.description: String
-    get() = value("DESCRIPTION") ?: ""
+    get() = value("DESCRIPTION")
