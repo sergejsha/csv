@@ -5,7 +5,7 @@ import de.halfbit.csv.Csv.DataRow
 import de.halfbit.csv.Csv.HeaderRow
 import de.halfbit.csv.Lexer.*
 
-public fun parseCsv(csvText: String): Csv {
+internal fun parseCsv(csvText: String): Csv {
     var pos = 0
     var lexer: Lexer = BeforeValue
 
@@ -26,9 +26,9 @@ public fun parseCsv(csvText: String): Csv {
 
     fun completeRow() {
         if (header.isEmpty()) {
-            header += HeaderRow(row.toList())
+            header += DefaultHeaderRow(row.toList())
         } else {
-            data += DataRow(row.toList(), header[0])
+            data += DefaultDataRow(row.toList(), header[0])
         }
         row.clear()
     }
@@ -78,18 +78,15 @@ public fun parseCsv(csvText: String): Csv {
                             BeforeValue
                         }
                         '\r' -> {
+                            pos++
                             when (nextChar()) {
                                 '\n' -> {
                                     pos++
-                                    InsideValue
-                                }
-                                else -> {
-                                    pos++
-                                    completeValue()
-                                    completeRow()
-                                    BeforeValue
                                 }
                             }
+                            completeValue()
+                            completeRow()
+                            BeforeValue
                         }
                         '\n' -> {
                             pos++
@@ -137,7 +134,8 @@ public fun parseCsv(csvText: String): Csv {
         pos++
     }
 
-    return Csv(header.getOrNull(0), data)
+    val headerRow = header.getOrNull(0) ?: DefaultHeaderRow(emptyList())
+    return Csv(headerRow, data)
 }
 
 private enum class Lexer {

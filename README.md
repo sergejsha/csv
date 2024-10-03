@@ -5,9 +5,9 @@ PR's are welcome!
 
 # 🗂 CSV ️
 
-Small, fast and convenient multplatform CSV parser and builder written for one of my projects, and then shared with awesome Kotlin community.
+Small, fast and convenient multiplatform CSV parser and builder written for one of my projects, and then shared with awesome Kotlin community.
 
-![Architecture diagram](https://www.plantuml.com/plantuml/svg/VP7BQkim48RtUeh1Avz5p3bRSt02oQA5q4AJNUb2aIQEY2v66kT2stUl8ijre51lFFppVtCPBG9nJxtHB1oLxRZd1ZekZhp53LqrWaT1tBOQsK5913GTNS6WsQ4FWnG8FJgwTjaYb1VHpeJc8S0odE2TGVmEo2Nw6XxI_yMTvqcMd7WDQnNe_og6KM-IJYwYMxnG-QU63NbbM_QPgqurScrb9LwUzqkdUsDBomsEJ8GVBKraxf6v4zSzbY9XJ_VK6CmdCb8vIiCE-OQnV2uejgwRQJoXXdrl1IbdGv7x35onwvMMSQrojLd75Z4gW0SOvNjhntt0cpKFDBd7p6soaOJgLJeYb6zLaqvUG-UTx0K6bls_UjXqq9bNxO5c7qrQU3nNN6p_BIP1khEDGZe6kvLpWmJ5twhwLqnFz2DfY_4L65kWbRtHNm00)
+![Architecture diagram](https://www.plantuml.com/plantuml/svg/VP9FQnin4CNl-XJ3dZPGB-tLb2KaERGGMgXBBwM7YJHUY-ZF8it6CMs_U-LPRJQqnRvO-_IRDuyPNMV6n9DtAZ_QC6923oFgHnnenoT7a4WpXi6HEbX3G7xa4tZo3vJoB6McH95FOqMqJRhWIZlC6Mumqsr-WfyAoW-T-nAFUGltDlFxSkn5vbYGh_JCxTKMTfni6DJlnM6jFX0QIblu8F-bMbI3ZDNmhXp5T2bUqMfXWw7dp_lRw2OVse2UIiUFWTUAwb7v9tGJjLhmJqBNV7ARQ7IewTjVq1i8T1InuDLlRL0-waaoptQzKdNiqDnCrXbAkQaPPhXvECjb6EtTxlwg0SomAA-fyjcDc3B9E6VpcHRrF_G-HNzEabl9ypfKFrTMGeQqz8JkkudCP7vqlQne2sEAPjAKLUrqaLayBp5gtTucsU70cr-zZ6_PqSRH_aKKmSHZE0iIjzYjXSjB53NE83Hlk-vTixwIVov3yx90TKt1JDxz0G00)
 
 # Usage
 
@@ -26,7 +26,7 @@ val csv = buildCsv {
     }
     row {
         value("BY")
-        value("BELARUS")
+        value("Belarus")
     }
 }
 
@@ -34,7 +34,7 @@ val csv = buildCsv {
 val csvText = csv.toCsvText()
 
 // Parse CSV text to get a CSV object
-val csv2 = parseCsv(csvText)
+val csv2 = Csv.parseText(csvText)
 
 // Data structure
 val allRows: List<Row> = csv2.rows
@@ -42,8 +42,8 @@ val header: HeaderRow? = csv2.header
 val data: List<DataRow> = csv2.data
 
 // Transform CSV
-val codes = data.mapNotNull { it.value("Code") } // ["DE", "BY"]
-val names = data.mapNotNull { it.value("Name") } // ["Germany", "Belarus"]
+val codes = data.map { it.value("Code") } // ["DE", "BY"]
+val names = data.map { it.value("Name") } // ["Germany", "Belarus"]
 ```
 
 Feel free to open PRs for features you miss, please remember keeping API minimalistic, predictable and self-explanatory.
@@ -54,7 +54,7 @@ In `gradle/libs.versions.toml`
 ```toml
 [versions]
 kotlin = "2.0.20"
-csv = "0.12"
+csv = "0.13"
 
 [libraries]
 csv = { module = "de.halfbit:csv", version.ref = "csv" }
@@ -85,6 +85,7 @@ kotlin {
 
 # Release Notes
 
+- 0.13  See PR #13 for details.
 - 0.12 Add HeaderRow and DataRow types, enabling easier data transformations
 - 0.11 Update to Kotlin 2.0.20
 - 0.10 Migrate to the Apache 2.0 license

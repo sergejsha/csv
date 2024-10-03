@@ -4,34 +4,42 @@ hide empty members
 hide stereotype
 hide circle
 
-class Csv {
-    header: HeaderRow?
-    data: List<DataRow>
+class BaseCsv {
+    allRows: List<Row>
     toCsvText(): String
 }
 
+class Csv {
+    header: HeaderRow
+    data: List<DataRow>
+}
+
 class HeaderRow {
-    indexOfColumn(name: String): Int
+    indexOfColumn(name): Int
 }
 
 class DataRow {
-    value(columnName: String): String?
+    value(columnName): String
+    replaceValue(columnName, newValue): DataRow
 }
 
 class Row
 class List<String>
 
-package "Top-level functions" {
-    class "buildCsv(DSL): Csv" as buildCsv
-    class "parseCsv(String): Csv" as parseCsv
+package "Builders" {
+    class "buildCsv(DSL)" as buildCsv
+    class "Csv.parseText(String)" as parseCsv
+    class "Csv.fromLists(List<List<String>>)" as fromList
 }
 
 buildCsv .[dotted].> Csv : produces
 parseCsv .[dotted].> Csv : produces
+fromList .[dotted].> Csv : produces
 
 HeaderRow -right-|> Row
 DataRow -left-|> Row
 Row -down-|> List
+Csv -right-|> BaseCsv
 Csv o-down- "0..1" HeaderRow
 Csv o-down- "0..n" DataRow
 

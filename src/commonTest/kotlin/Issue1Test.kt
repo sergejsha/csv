@@ -18,7 +18,7 @@ class Issue1Test {
             """.trimIndent()
 
         val csv = parseCsv(givenCsvString)
-        assertEquals(3, csv.rows.size)
-        assertContentEquals(listOf("1999", "Chevy", "Venture", ""), csv.rows[2])
+        assertEquals(3, csv.allRows.size)
+        assertContentEquals(listOf("1999", "Chevy", "Venture", ""), csv.allRows[2])
     }
 }

@@ -37,17 +37,17 @@ class BuildCsvTest {
         assertEquals(header.indexOf("DESCRIPTION"), 2)
 
         assertEquals(csv.data.size, 3)
-        assertEquals(csv.data[0].value("NAME"), "BEVERLY HILLS BLACK")
-        assertEquals(csv.data[0].value("CODE"), "BVH.1-NAR.S8")
-        assertEquals(csv.data[0].value("DESCRIPTION"), null)
+        assertEquals("BEVERLY HILLS BLACK", csv.data[0].value("NAME"))
+        assertEquals("BVH.1-NAR.S8", csv.data[0].value("CODE"))
+        assertEquals("", csv.data[0].value("DESCRIPTION"))
 
-        assertEquals(csv.data[1].value("NAME"), "BOAVISTA BLACK GRADIENT")
-        assertEquals(csv.data[1].value("CODE"), "BVS.1-NAR.S5")
-        assertEquals(csv.data[1].value("DESCRIPTION"), "")
+        assertEquals("BOAVISTA BLACK GRADIENT", csv.data[1].value("NAME"))
+        assertEquals("BVS.1-NAR.S5", csv.data[1].value("CODE"))
+        assertEquals("", csv.data[1].value("DESCRIPTION"))
 
-        assertEquals(csv.data[2].value("NAME"), "GXP EYEWEAR PACKAGING")
-        assertEquals(csv.data[2].value("CODE"), "PKG.2")
-        assertEquals(csv.data[2].value("DESCRIPTION"), "PU pouch for eyewear in black cardboard box")
+        assertEquals("GXP EYEWEAR PACKAGING", csv.data[2].value("NAME"))
+        assertEquals("PKG.2", csv.data[2].value("CODE"))
+        assertEquals("PU pouch for eyewear in black cardboard box", csv.data[2].value("DESCRIPTION"))
     }
 
     @Test
@@ -75,10 +75,11 @@ class BuildCsvTest {
             }
         }
 
-        val descriptions = csv.data.mapNotNull {
+        val descriptions = csv.data.map {
             it.value("DESCRIPTION")
         }
 
-        assertEquals(listOf("", "PU pouch for eyewear in black cardboard box"), descriptions)
+        val expectedDescriptions = listOf("", "", "PU pouch for eyewear in black cardboard box")
+        assertEquals(expectedDescriptions, descriptions)
     }
 }
