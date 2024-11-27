@@ -8,7 +8,7 @@ plugins {
 }
 
 group = "de.halfbit"
-version = "0.13"
+version = "0.14"
 
 repositories {
     mavenCentral()
@@ -18,6 +18,7 @@ kotlin {
     explicitApi()
     jvm()
     linuxX64()
+    linuxArm64()
     mingwX64()
     macosX64()
     js {
@@ -131,6 +132,9 @@ if (canPublishToMaven) {
         }
         "compileTestKotlinLinuxX64" {
             mustRunAfter("signLinuxX64Publication")
+        }
+        "compileTestKotlinLinuxArm64" {
+            mustRunAfter("signLinuxArm64Publication")
         }
         "compileTestKotlinMacosX64" {
             mustRunAfter("signMacosX64Publication")
