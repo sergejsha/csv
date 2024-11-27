@@ -51,8 +51,8 @@ val names = data.map { it.value("Name") } // ["Germany", "Belarus"]
 In `gradle/libs.versions.toml`
 ```toml
 [versions]
-kotlin = "2.0.20"
-csv = "0.13"
+kotlin = "2.0.21"
+csv = "0.14"
 
 [libraries]
 csv = { module = "de.halfbit:csv", version.ref = "csv" }
@@ -83,7 +83,8 @@ kotlin {
 
 # Release Notes
 
-- 0.13 Some API changes and DataRow.replaceValue(). See PR #13 for details.
+- 0.14 Add linuxArm64 target, update to Kotlin 2.0.21
+- 0.13 Some API changes and DataRow.replaceValue(), see PR #13 for details
 - 0.12 Add HeaderRow and DataRow types, enabling easier data transformations
 - 0.11 Update to Kotlin 2.0.20
 - 0.10 Migrate to the Apache 2.0 license
