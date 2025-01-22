@@ -21,6 +21,7 @@ kotlin {
     linuxArm64()
     mingwX64()
     macosX64()
+    macosArm64()
     js {
         browser {
             testTask {
