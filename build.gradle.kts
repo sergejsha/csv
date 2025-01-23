@@ -8,7 +8,7 @@ plugins {
 }
 
 group = "de.halfbit"
-version = "0.14"
+version = "0.15"
 
 repositories {
     mavenCentral()
@@ -88,7 +88,7 @@ if (canPublishToMaven) {
 
             pom {
                 name.set(rootProject.name)
-                description.set("Tiny Kotlin Multiplatform library for building and exporting CSV files")
+                description.set("Tiny Kotlin Multiplatform library for parsing, building and exporting CSV files")
                 url.set("https://www.halfbit.de")
                 licenses {
                     license {
@@ -139,6 +139,9 @@ if (canPublishToMaven) {
         }
         "compileTestKotlinMacosX64" {
             mustRunAfter("signMacosX64Publication")
+        }
+        "compileTestKotlinMacosArm64" {
+            mustRunAfter("signMacosArm64Publication")
         }
         "compileTestKotlinMingwX64" {
             mustRunAfter("signMingwX64Publication")

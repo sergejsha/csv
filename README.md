@@ -11,10 +11,10 @@ Small, fast and convenient multiplatform CSV parser and builder written for one 
 
 # Usage
 
-There is no documentation for the API which consists of just three methods:
+Here is what you can do with the library: 
 ```kotlin
 
-// Build CSV object using simple DSL
+// (1) Build a CSV file using simple DSL
 val csv = buildCsv {
     row {
         value("Code")
@@ -30,18 +30,18 @@ val csv = buildCsv {
     }
 }
 
-// Export CSV object to CSV text
+// (2) Export a CSV object to a CSV string
 val csvText = csv.toCsvText()
 
-// Parse CSV text to get a CSV object
+// (3) Parse a CSV string to get a CSV object
 val csv2 = Csv.parseText(csvText)
 
-// Data structure
+// There are the data structures supported by the library 
 val allRows: List<Row> = csv2.rows
 val header: HeaderRow = csv2.header
 val data: List<DataRow> = csv2.data
 
-// Transform CSV
+// (4) Transform CSV data
 val codes = data.map { it.value("Code") } // ["DE", "BY"]
 val names = data.map { it.value("Name") } // ["Germany", "Belarus"]
 ```
@@ -52,7 +52,7 @@ In `gradle/libs.versions.toml`
 ```toml
 [versions]
 kotlin = "2.0.21"
-csv = "0.14"
+csv = "0.15"
 
 [libraries]
 csv = { module = "de.halfbit:csv", version.ref = "csv" }
@@ -83,6 +83,7 @@ kotlin {
 
 # Release Notes
 
+- 0.15 Add macosArm64 target
 - 0.14 Add linuxArm64 target, update to Kotlin 2.0.21
 - 0.13 Some API changes and DataRow.replaceValue(), see PR #13 for details
 - 0.12 Add HeaderRow and DataRow types, enabling easier data transformations
@@ -99,7 +100,7 @@ kotlin {
 
 # License
 ```
-Copyright 2023-2024 Sergej Shafarenka, www.halfbit.de
+Copyright 2023-2025 Sergej Shafarenka, www.halfbit.de
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
