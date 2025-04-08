@@ -51,8 +51,8 @@ val names = data.map { it.value("Name") } // ["Germany", "Belarus"]
 In `gradle/libs.versions.toml`
 ```toml
 [versions]
-kotlin = "2.0.21"
-csv = "0.15"
+kotlin = "2.1.20"
+csv = "0.16"
 
 [libraries]
 csv = { module = "de.halfbit:csv", version.ref = "csv" }
