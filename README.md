@@ -83,6 +83,7 @@ kotlin {
 
 # Release Notes
 
+- 0.16 Update to Kotlin 2.1.20
 - 0.15 Add macosArm64 target
 - 0.14 Add linuxArm64 target, update to Kotlin 2.0.21
 - 0.13 Some API changes and DataRow.replaceValue(), see PR #13 for details
