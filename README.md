@@ -7,7 +7,9 @@ Feel free to open PRs for features you miss, please remember keeping API minimal
 
 Small, fast and convenient multiplatform CSV parser and builder written for one of my projects, and then shared with awesome Kotlin community.
 
-![Architecture diagram](https://www.plantuml.com/plantuml/svg/VP9FQnin4CNl-XJ3dZPGB-tLb2KaERGGMgXBBwM7YJHUY-ZF8it6CMs_U-LPRJQqnRvO-_IRDuyPNMV6n9DtAZ_QC6923oFgHnnenoT7a4WpXi6HEbX3G7xa4tZo3vJoB6McH95FOqMqJRhWIZlC6Mumqsr-WfyAoW-T-nAFUGltDlFxSkn5vbYGh_JCxTKMTfni6DJlnM6jFX0QIblu8F-bMbI3ZDNmhXp5T2bUqMfXWw7dp_lRw2OVse2UIiUFWTUAwb7v9tGJjLhmJqBNV7ARQ7IewTjVq1i8T1InuDLlRL0-waaoptQzKdNiqDnCrXbAkQaPPhXvECjb6EtTxlwg0SomAA-fyjcDc3B9E6VpcHRrF_G-HNzEabl9ypfKFrTMGeQqz8JkkudCP7vqlQne2sEAPjAKLUrqaLayBp5gtTucsU70cr-zZ6_PqSRH_aKKmSHZE0iIjzYjXSjB53NE83Hlk-vTixwIVov3yx90TKt1JDxz0G00)
+# Architecture
+
+<img src="http://www.plantuml.com/plantuml/proxy?cache=no&src=https://raw.githubusercontent.com/sergejsha/csv/master/documentation/architecture.iuml">
 
 # Usage
 
