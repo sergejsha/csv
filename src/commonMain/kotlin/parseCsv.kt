@@ -58,6 +58,14 @@ internal fun parseCsv(csvText: String): Csv {
                     completeValue()
                     BeforeValue
                 }
+                '\r' -> {
+                    if (nextChar() == '\n') {
+                        pos++
+                    }
+                    completeValue()
+                    completeRow()
+                    BeforeValue
+                }
                 '\n' -> {
                     completeValue()
                     completeRow()
@@ -132,6 +140,14 @@ internal fun parseCsv(csvText: String): Csv {
             }
         }
         pos++
+    }
+
+    if (value.isNotEmpty()) {
+        completeValue()
+    }
+
+    if (row.isNotEmpty()) {
+        completeRow()
     }
 
     val headerRow = header.getOrNull(0) ?: DefaultHeaderRow(emptyList())
