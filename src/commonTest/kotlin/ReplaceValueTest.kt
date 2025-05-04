@@ -1,5 +1,6 @@
 package de.halfbit.csv
 
+import de.halfbit.csv.Csv.Companion.parserCsvText
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
@@ -19,7 +20,7 @@ class ReplaceValueTest {
                 Line 3"
             """.trimIndent()
 
-        val csv = Csv.parserText(givenCsvString)
+        val csv = parserCsvText(givenCsvString)
         val data = csv.data
             .map {
                 val code = it.code
