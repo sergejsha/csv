@@ -54,7 +54,7 @@ In `gradle/libs.versions.toml`
 ```toml
 [versions]
 kotlin = "2.1.20"
-csv = "0.16"
+csv = "0.17"
 
 [libraries]
 csv = { module = "de.halfbit:csv", version.ref = "csv" }
