@@ -52,6 +52,14 @@ public interface Csv : BaseCsv {
     }
 
     public companion object {
+        /** Use it for parsing a cvs-formatted text. */
+        public fun parserCsvText(csvText: String): Csv = parseCsv(csvText)
+
+        @Deprecated(
+            message = "Replaced with the more consistently named 'parserCsvText()' method." +
+                    " This method will be removed in 0.18, please migrate.",
+            replaceWith = ReplaceWith("parserCsvText(csvText)"),
+        )
         public fun parserText(csvText: String): Csv = parseCsv(csvText)
 
         public fun fromLists(allRows: List<List<String>>): BaseCsv {
@@ -71,8 +79,12 @@ public interface Csv : BaseCsv {
 public enum class NewLine(
     public val value: String,
 ) {
+    /** Line feed as the line terminator */
     LF("\n"),
-    CRLF("\r\n")
+    /** Carriage Return + Line feed as the line terminator */
+    CRLF("\r\n"),
+    /** Carriage Return as the line terminator */
+    CR("\r")
 }
 
 // https://en.wikipedia.org/wiki/Comma-separated_values#Basic_rules

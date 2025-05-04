@@ -28,7 +28,7 @@ class List<String>
 
 package "Builders" {
     class "buildCsv(DSL)" as buildCsv
-    class "Csv.parseText(String)" as parseCsv
+    class "Csv.parseCsvText(String)" as parseCsv
     class "Csv.fromLists(List<List<String>>)" as fromList
 }
 
