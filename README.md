@@ -9,11 +9,11 @@ Small, fast and convenient multiplatform CSV parser and builder written for one 
 
 # Architecture
 
-<img src="http://www.plantuml.com/plantuml/proxy?cache=no&src=https://raw.githubusercontent.com/sergejsha/csv/master/documentation/architecture.iuml">
+<img src="http://www.plantuml.com/plantuml/proxy?cache=no&src=https://raw.githubusercontent.com/sergejsha/csv/master/documentation/architecture.v2.iuml">
 
 # Usage
 
-Here is what you can do with the library: 
+Here is what you can do with the library:
 ```kotlin
 
 // (1) Build a CSV file using simple DSL
@@ -36,7 +36,7 @@ val csv = buildCsv {
 val csvText = csv.toCsvText()
 
 // (3) Parse a CSV string to get a CSV object
-val csv2 = Csv.parseText(csvText)
+val csv2 = Csv.parseCsvText(csvText)
 
 // There are the data structures supported by the library 
 val allRows: List<Row> = csv2.rows
