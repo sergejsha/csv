@@ -69,8 +69,8 @@ assertEquals("Code,Name\nDE,Deutschland\nBY,Weißrussland\n", csv3.toCsvText())
 In `gradle/libs.versions.toml`
 ```toml
 [versions]
-kotlin = "2.1.20"
-csv = "0.17"
+kotlin = "2.2.0"
+csv = "1.0"
 
 [libraries]
 csv = { module = "de.halfbit:csv", version.ref = "csv" }
