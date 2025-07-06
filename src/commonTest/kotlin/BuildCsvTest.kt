@@ -16,16 +16,16 @@ class BuildCsvTest {
                 value("CODE")
                 value("DESCRIPTION")
             }
-            row {
+            data {
                 value("BEVERLY HILLS BLACK")
                 value("BVH.1-NAR.S8")
             }
-            row {
+            data {
                 value("BOAVISTA BLACK GRADIENT")
                 value("BVS.1-NAR.S5")
                 value("")
             }
-            row {
+            data {
                 value("GXP EYEWEAR PACKAGING")
                 value("PKG.2")
                 value("PU pouch for eyewear in black cardboard box")
@@ -66,16 +66,16 @@ class BuildCsvTest {
                 value("CODE")
                 value("DESCRIPTION")
             }
-            row {
+            data {
                 value("BEVERLY HILLS BLACK")
                 value("BVH.1-NAR.S8")
             }
-            row {
+            data {
                 value("BOAVISTA BLACK GRADIENT")
                 value("BVS.1-NAR.S5")
                 value("")
             }
-            row {
+            data {
                 value("GXP EYEWEAR PACKAGING")
                 value("PKG.2")
                 value("PU pouch for eyewear in black cardboard box")

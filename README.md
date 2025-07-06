@@ -16,36 +16,52 @@ Small, fast and convenient multiplatform CSV parser and builder written for one 
 Here is what you can do with the library:
 ```kotlin
 
-// (1) Build a CSV file using simple DSL
+// (1) build csv
 val csv = buildCsv {
-    row {
+    header {
         value("Code")
         value("Name")
     }
-    row {
+    data {
         value("DE")
-        value("Germany")
+        value("Deutschland")
     }
-    row {
+    data {
         value("BY")
         value("Belarus")
     }
+} as CsvWithHeader
+
+val code = csv.header.headerByName("Code") as CsvHeader
+val name = csv.header.headerByName("Name") as CsvHeader
+
+assertEquals(code, CsvHeader(0, "Code"))
+assertEquals(name, CsvHeader(1, "Name"))
+assertEquals(csv.data[0][code], "DE")
+assertEquals(csv.data[0][name], "Deutschland")
+assertEquals(csv.data[1][code], "BY")
+assertEquals(csv.data[1][name], "Belarus")
+
+// (2) csv to text
+val csvText = csv.toCsvText()
+assertEquals("Code,Name\nDE,Deutschland\nBY,Belarus\n", csvText)
+
+// (3) parse csv text
+val csv2 = CsvWithHeader.parseCsvText(csvText) as CsvWithHeader
+
+assertEquals(csv.header, csv2.header)
+assertEquals(csv.data, csv2.data)
+assertEquals(csv.allRows, csv2.allRows)
+
+// (5) transform csv
+val allRows = csv.allRows.map { row ->
+    row.mapValue(name) { value ->
+        if (value == "Belarus") "Weißrussland" else value
+    }
 }
 
-// (2) Export a CSV object to a CSV string
-val csvText = csv.toCsvText()
-
-// (3) Parse a CSV string to get a CSV object
-val csv2 = Csv.parseCsvText(csvText)
-
-// There are the data structures supported by the library 
-val allRows: List<Row> = csv2.rows
-val header: HeaderRow = csv2.header
-val data: List<DataRow> = csv2.data
-
-// (4) Transform CSV data
-val codes = data.map { it.value("Code") } // ["DE", "BY"]
-val names = data.map { it.value("Name") } // ["Germany", "Belarus"]
+val csv3 = CsvWithHeader.fromLists(allRows) as CsvWithHeader
+assertEquals("Code,Name\nDE,Deutschland\nBY,Weißrussland\n", csv3.toCsvText())
 ```
 
 # Dependencies

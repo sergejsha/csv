@@ -30,7 +30,7 @@ public data class CsvHeader(
     public val name: String,
 )
 
-public class CsvHeaderRow(
+public data class CsvHeaderRow(
     private val headers: List<CsvHeader>,
 ) : List<CsvHeader> by headers {
     private val headersByName = headers.associateBy { it.name }

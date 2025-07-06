@@ -29,7 +29,7 @@ public class CsvBuilder @PublishedApi internal constructor(
         headerRows += row.toCsvHeaderRow()
     }
 
-    public inline fun row(block: CsvRowBuilder.() -> Unit) {
+    public inline fun data(block: CsvRowBuilder.() -> Unit) {
         val row = mutableListOf<String>()
         block(CsvRowBuilder(row))
         dataRows += row
