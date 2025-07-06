@@ -1,4 +1,4 @@
-/** Copyright 2023 Halfbit GmbH, Sergej Shafarenka */
+/** Copyright 2023-2025 Halfbit GmbH, Sergej Shafarenka */
 package de.halfbit.csv
 
 import kotlin.test.Test

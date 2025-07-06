@@ -1,10 +1,8 @@
-/** Copyright 2023 Halfbit GmbH, Sergej Shafarenka */
+/** Copyright 2023-2025 Halfbit GmbH, Sergej Shafarenka */
 package de.halfbit.csv
 
-import de.halfbit.csv.CsvWithHeader
 import kotlin.test.Test
 import kotlin.test.assertEquals
-import kotlin.test.assertNotNull
 
 class CsvTest {
 

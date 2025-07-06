@@ -16,15 +16,14 @@ public fun CsvDataRow.getOrEmpty(header: CsvHeader): String? =
 public inline fun CsvDataRow.getOrElse(header: CsvHeader, defaultValue: (CsvHeader) -> String): String =
     getOrElse(header.index) { defaultValue(header) }
 
-public inline fun CsvDataRow.mapValue(header: CsvHeader, transform: (String) -> String): List<String> {
-    return mapIndexed { index, value ->
+public inline fun CsvDataRow.mapValue(header: CsvHeader, transform: (String) -> String): List<String> =
+    mapIndexed { index, value ->
         if (index == header.index) {
             transform(value)
         } else {
             value
         }
     }
-}
 
 public data class CsvHeader(
     public val index: Int,

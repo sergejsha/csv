@@ -1,12 +1,13 @@
+/** Copyright 2023-2025 Halfbit GmbH, Sergej Shafarenka */
 package de.halfbit.csv
 
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
-class ReplaceValueTest {
+class MapValueTest {
 
     @Test
-    fun replaceValue() {
+    fun mapValue() {
 
         val givenCsvString =
             """
