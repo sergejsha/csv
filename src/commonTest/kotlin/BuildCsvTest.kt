@@ -2,6 +2,8 @@ package de.halfbit.csv
 
 import kotlin.test.Test
 import kotlin.test.assertEquals
+import kotlin.test.assertNotNull
+import kotlin.test.assertNull
 
 class BuildCsvTest {
 
@@ -9,7 +11,7 @@ class BuildCsvTest {
     fun buildCsv() {
 
         val csv = buildCsv {
-            row {
+            header {
                 value("NAME")
                 value("CODE")
                 value("DESCRIPTION")
@@ -28,33 +30,38 @@ class BuildCsvTest {
                 value("PKG.2")
                 value("PU pouch for eyewear in black cardboard box")
             }
-        }
+        } as CsvWithHeader
 
         val header = csv.header
-        checkNotNull(header)
-        assertEquals(header.indexOf("NAME"), 0)
-        assertEquals(header.indexOf("CODE"), 1)
-        assertEquals(header.indexOf("DESCRIPTION"), 2)
 
+        val name = header.headerByName("NAME") as CsvHeader
+        assertEquals(CsvHeader(0, "NAME"), name)
+
+        val code = header.headerByName("CODE") as CsvHeader
+        assertEquals(CsvHeader(1, "CODE"), code)
+
+        val description = header.headerByName("DESCRIPTION") as CsvHeader
+        assertEquals(CsvHeader(2, "DESCRIPTION"), description)
         assertEquals(csv.data.size, 3)
-        assertEquals("BEVERLY HILLS BLACK", csv.data[0].value("NAME"))
-        assertEquals("BVH.1-NAR.S8", csv.data[0].value("CODE"))
-        assertEquals("", csv.data[0].value("DESCRIPTION"))
 
-        assertEquals("BOAVISTA BLACK GRADIENT", csv.data[1].value("NAME"))
-        assertEquals("BVS.1-NAR.S5", csv.data[1].value("CODE"))
-        assertEquals("", csv.data[1].value("DESCRIPTION"))
+        assertEquals("BEVERLY HILLS BLACK", csv.data[0].getOrEmpty(name))
+        assertEquals("BVH.1-NAR.S8", csv.data[0].getOrEmpty(code))
+        assertNull(csv.data[0].getOrNull(description))
 
-        assertEquals("GXP EYEWEAR PACKAGING", csv.data[2].value("NAME"))
-        assertEquals("PKG.2", csv.data[2].value("CODE"))
-        assertEquals("PU pouch for eyewear in black cardboard box", csv.data[2].value("DESCRIPTION"))
+        assertEquals("BOAVISTA BLACK GRADIENT", csv.data[1].getOrEmpty(name))
+        assertEquals("BVS.1-NAR.S5", csv.data[1].getOrEmpty(code))
+        assertEquals("", csv.data[1].get(description))
+
+        assertEquals("GXP EYEWEAR PACKAGING", csv.data[2].getOrEmpty(name))
+        assertEquals("PKG.2", csv.data[2].getOrEmpty(code))
+        assertEquals("PU pouch for eyewear in black cardboard box", csv.data[2].get(description))
     }
 
     @Test
     fun mapCsvNotNull() {
 
         val csv = buildCsv {
-            row {
+            header {
                 value("NAME")
                 value("CODE")
                 value("DESCRIPTION")
@@ -73,13 +80,11 @@ class BuildCsvTest {
                 value("PKG.2")
                 value("PU pouch for eyewear in black cardboard box")
             }
-        }
+        } as CsvWithHeader
 
-        val descriptions = csv.data.map {
-            it.value("DESCRIPTION")
-        }
-
-        val expectedDescriptions = listOf("", "", "PU pouch for eyewear in black cardboard box")
+        val description = csv.header.headerByName("DESCRIPTION") as CsvHeader
+        val descriptions = csv.data.map { it.getOrNull(description) }
+        val expectedDescriptions = listOf(null, "", "PU pouch for eyewear in black cardboard box")
         assertEquals(expectedDescriptions, descriptions)
     }
 }

@@ -1,8 +1,10 @@
 /** Copyright 2023 Halfbit GmbH, Sergej Shafarenka */
 package de.halfbit.csv
 
+import de.halfbit.csv.CsvWithHeader
 import kotlin.test.Test
 import kotlin.test.assertEquals
+import kotlin.test.assertNotNull
 
 class CsvTest {
 
@@ -21,7 +23,7 @@ class CsvTest {
                 Western Sahara,EH
             """.trimIndent()
 
-        val csv = parseCsv(givenCsvString)
+        val csv = CsvNoHeader.parseCsvText(givenCsvString)
         val csvString = csv.toCsvText().trim()
 
         assertEquals(givenCsvString, csvString)
@@ -35,7 +37,7 @@ class CsvTest {
                 Western Sahara,EH
             """.trimIndent()
 
-        val csv = parseCsv(givenCsvString)
+        val csv = CsvNoHeader.parseCsvText(givenCsvString)
         val csvString = csv.toCsvText().trim()
 
         assertEquals(givenCsvString, csvString)
@@ -49,7 +51,7 @@ class CsvTest {
                 VE,"Venezuela, Bolivarian Republic of"
             """.trimIndent()
 
-        val csv = parseCsv(givenCsvString)
+        val csv = CsvNoHeader.parseCsvText(givenCsvString)
         val csvString = csv.toCsvText().trim()
 
         assertEquals(givenCsvString, csvString)
@@ -66,7 +68,7 @@ class CsvTest {
             """.trimIndent()
                 .replace("\n", "\r\n")
 
-        val csv = parseCsv(givenCsvString)
+        val csv = CsvWithHeader.parseCsvText(givenCsvString) as CsvWithHeader
         val header = csv.allRows[0]
 
         println(csv.toCsvText())
@@ -90,7 +92,7 @@ class CsvTest {
                 "Venezuela, Bolivarian Republic of",VE
             """.trimIndent()
 
-        val csv = parseCsv(givenCsvString)
+        val csv = CsvNoHeader.parseCsvText(givenCsvString)
         val csvString = csv.toCsvText().trim()
 
         assertEquals(givenCsvString, csvString)
@@ -352,7 +354,7 @@ class CsvTest {
                 ZW,Zimbabwe
             """.trimIndent()
 
-        val csv = parseCsv(givenCsvString)
+        val csv = CsvWithHeader.parseCsvText(givenCsvString) as CsvWithHeader
         val csvString = csv.toCsvText(escapeWhitespaces = true).trim()
 
         assertEquals(givenCsvString, csvString)

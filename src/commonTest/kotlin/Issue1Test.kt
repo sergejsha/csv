@@ -17,7 +17,7 @@ class Issue1Test {
                 1999,Chevy,Venture,
             """.trimIndent()
 
-        val csv = parseCsv(givenCsvString)
+        val csv = CsvWithHeader.parseCsvText(givenCsvString) as CsvWithHeader
         assertEquals(3, csv.allRows.size)
         assertContentEquals(listOf("1999", "Chevy", "Venture", ""), csv.allRows[2])
     }

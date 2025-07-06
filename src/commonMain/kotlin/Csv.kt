@@ -1,17 +1,47 @@
-/** Copyright 2023 Halfbit GmbH, Sergej Shafarenka */
+/** Copyright 2023-2025 Halfbit GmbH, Sergej Shafarenka */
 package de.halfbit.csv
 
-import de.halfbit.csv.BaseCsv.Row
+public typealias CsvRow = List<String>
+public typealias CsvDataRow = List<String>
 
-/**
- * Object with comma-separated values stored as list of [Row]'s. Each row is a list
- * of strings. Empty values are empty strings.
- *
- * If your CSV-data has header row, use [BaseCsv] instead of this base type.
- */
-public interface BaseCsv {
-    public val allRows: List<Row>
+public operator fun CsvDataRow.get(header: CsvHeader): String =
+    get(header.index)
 
+public fun CsvDataRow.getOrNull(header: CsvHeader): String? =
+    getOrNull(header.index)
+
+public fun CsvDataRow.getOrEmpty(header: CsvHeader): String? =
+    getOrNull(header.index) ?: ""
+
+public inline fun CsvDataRow.getOrElse(header: CsvHeader, defaultValue: (CsvHeader) -> String): String =
+    getOrElse(header.index) { defaultValue(header) }
+
+public inline fun CsvDataRow.mapValue(header: CsvHeader, transform: (String) -> String): List<String> {
+    return mapIndexed { index, value ->
+        if (index == header.index) {
+            transform(value)
+        } else {
+            value
+        }
+    }
+}
+
+public data class CsvHeader(
+    public val index: Int,
+    public val name: String,
+)
+
+public class CsvHeaderRow(
+    private val headers: List<CsvHeader>,
+) : List<CsvHeader> by headers {
+    private val headersByName = headers.associateBy { it.name }
+    public fun headerByName(name: String): CsvHeader? = headersByName[name]
+    public fun headerByIndex(index: Int): CsvHeader? = headers.getOrNull(index)
+}
+
+public abstract class Csv(
+    public val allRows: List<CsvRow>,
+) {
     // Multiline issue: https://stackoverflow.com/questions/2668678/importing-csv-with-line-breaks-in-excel-2007
     public fun toCsvText(
         newLine: NewLine = NewLine.LF,
@@ -28,50 +58,61 @@ public interface BaseCsv {
             append(newLine.value)
         }
     }
+}
 
-    public interface Row : List<String> {
-        public fun replaceValue(valueIndex: Int, newValue: String): Row
+public class CsvWithHeader(
+    public val header: CsvHeaderRow,
+    public val data: List<CsvDataRow>,
+) : Csv(listOf(header.map { it.name }) + data) {
+
+    override fun toString(): String =
+        buildString {
+            append(header)
+            append("\n")
+            data.forEach { data ->
+                append(data)
+                append("\n")
+            }
+        }
+
+    public companion object {
+        public fun parseCsvText(csvText: String): CsvWithHeader? {
+            val (header, data) = parseCsv(csvText, true)
+            return if (header == null) null else {
+                CsvWithHeader(header, data)
+            }
+        }
+
+        public fun fromLists(allRows: List<List<String>>): CsvWithHeader? {
+            val headerRowNames = allRows.getOrNull(0)
+            return if (headerRowNames == null) null else {
+                val headerRow = headerRowNames.toCsvHeaderRow()
+                CsvWithHeader(headerRow, allRows.subList(1, allRows.size))
+            }
+        }
     }
 }
 
-/**
- * CSV-object  by with a mandatory header row. It has more convenient methods
- * for working with columns by their names.
- */
-public interface Csv : BaseCsv {
-    public val header: HeaderRow
-    public val data: List<DataRow>
+public class CsvNoHeader(
+    public val data: List<CsvDataRow>,
+) : Csv(data) {
 
-    public interface HeaderRow : Row {
-        public fun indexOfColumn(name: String): Int
-    }
-
-    public interface DataRow : Row {
-        public fun value(columnName: String): String
-        public fun replaceValue(columnName: String, newValue: String): DataRow
-    }
-
-    public companion object {
-        /** Use it for parsing a cvs-formatted text. */
-        public fun parserCsvText(csvText: String): Csv = parseCsv(csvText)
-
-        @Deprecated(
-            message = "Replaced with the more consistently named 'parserCsvText()' method." +
-                    " This method will be removed in 0.18, please migrate.",
-            replaceWith = ReplaceWith("parserCsvText(csvText)"),
-        )
-        public fun parserText(csvText: String): Csv = parseCsv(csvText)
-
-        public fun fromLists(allRows: List<List<String>>): BaseCsv {
-            return BaseCsv(allRows.map { DefaultRow(it) })
+    override fun toString(): String =
+        buildString {
+            data.forEach { data ->
+                append(data)
+                append("\n")
+            }
         }
 
-        public fun fromLists(header: List<String>, data: List<List<String>>): Csv {
-            val headerRow = DefaultHeaderRow(header)
-            return Csv(
-                header = headerRow,
-                data = data.map { DefaultDataRow(it, headerRow) },
-            )
+    public companion object {
+        public fun parseCsvText(csvText: String): CsvNoHeader {
+            val (_, data) = parseCsv(csvText, false)
+            return CsvNoHeader(data)
+        }
+
+        public fun fromLists(allRows: List<List<String>>): CsvNoHeader {
+            return CsvNoHeader(allRows)
         }
     }
 }
@@ -81,8 +122,10 @@ public enum class NewLine(
 ) {
     /** Line feed as the line terminator */
     LF("\n"),
+
     /** Carriage Return + Line feed as the line terminator */
     CRLF("\r\n"),
+
     /** Carriage Return as the line terminator */
     CR("\r")
 }
