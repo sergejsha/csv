@@ -26,7 +26,7 @@ public data class CsvNoHeader(
          * @param csvText the CSV-formatted string
          * @return a [CsvNoHeader] instance
          */
-        public fun parseCsvText(csvText: String): CsvNoHeader {
+        public fun fromCsvText(csvText: String): CsvNoHeader {
             val (_, data) = parseCsv(csvText, false)
             return CsvNoHeader(data)
         }

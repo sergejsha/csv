@@ -39,7 +39,7 @@ class ReadmeExampleTest {
         assertEquals("Code,Name\nDE,Deutschland\nBY,Belarus\n", csvText)
 
         // (3) parse csv text
-        val csv2 = CsvWithHeader.parseCsvText(csvText) as CsvWithHeader
+        val csv2 = CsvWithHeader.fromCsvText(csvText) as CsvWithHeader
 
         assertEquals(csv.header, csv2.header)
         assertEquals(csv.data, csv2.data)

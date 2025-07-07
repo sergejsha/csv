@@ -11,7 +11,7 @@ class Issue24Test {
     fun rn_can_be_used_as_a_line_terminator() {
 
         val givenCsvString = "date,amount,user_id,id\r\n2025-04-14,250.00,2,2\r\n2025-04-15,100.50,1,1\r\n"
-        val csv = CsvNoHeader.parseCsvText(givenCsvString)
+        val csv = CsvNoHeader.fromCsvText(givenCsvString)
 
         assertEquals(3, csv.allRows.size)
         assertContentEquals(listOf("date", "amount", "user_id", "id"), csv.allRows[0])
@@ -23,7 +23,7 @@ class Issue24Test {
     fun r_can_be_used_as_a_line_terminator() {
 
         val givenCsvString = "date,amount,user_id,id\r2025-04-14,250.00,2,2\r2025-04-15,100.50,1,1\r"
-        val csv = CsvNoHeader.parseCsvText(givenCsvString)
+        val csv = CsvNoHeader.fromCsvText(givenCsvString)
 
         assertEquals(3, csv.allRows.size)
         assertContentEquals(listOf("date", "amount", "user_id", "id"), csv.allRows[0])
@@ -35,7 +35,7 @@ class Issue24Test {
     fun last_row_can_have_no_line_terminators() {
 
         val givenCsvString = "date,amount,user_id,id\r\n2025-04-14,250.00,2,2"
-        val csv = CsvNoHeader.parseCsvText(givenCsvString)
+        val csv = CsvNoHeader.fromCsvText(givenCsvString)
 
         assertEquals(2, csv.allRows.size)
         assertContentEquals(listOf("date", "amount", "user_id", "id"), csv.allRows[0])

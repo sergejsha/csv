@@ -30,7 +30,7 @@ public data class CsvWithHeader(
          * @param csvText the CSV-formatted string
          * @return a [CsvWithHeader] if parsing succeeds and the header row is present, or `null` otherwise.
          */
-        public fun parseCsvText(csvText: String): CsvWithHeader? {
+        public fun fromCsvText(csvText: String): CsvWithHeader? {
             val (header, data) = parseCsv(csvText, true)
             return if (header == null) null else {
                 CsvWithHeader(header, data)

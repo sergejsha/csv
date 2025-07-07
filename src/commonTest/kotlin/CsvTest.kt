@@ -21,7 +21,7 @@ class CsvTest {
                 Western Sahara,EH
             """.trimIndent()
 
-        val csv = CsvNoHeader.parseCsvText(givenCsvString)
+        val csv = CsvNoHeader.fromCsvText(givenCsvString)
         val csvString = csv.toCsvText().trim()
 
         assertEquals(givenCsvString, csvString)
@@ -35,7 +35,7 @@ class CsvTest {
                 Western Sahara,EH
             """.trimIndent()
 
-        val csv = CsvNoHeader.parseCsvText(givenCsvString)
+        val csv = CsvNoHeader.fromCsvText(givenCsvString)
         val csvString = csv.toCsvText().trim()
 
         assertEquals(givenCsvString, csvString)
@@ -49,7 +49,7 @@ class CsvTest {
                 VE,"Venezuela, Bolivarian Republic of"
             """.trimIndent()
 
-        val csv = CsvNoHeader.parseCsvText(givenCsvString)
+        val csv = CsvNoHeader.fromCsvText(givenCsvString)
         val csvString = csv.toCsvText().trim()
 
         assertEquals(givenCsvString, csvString)
@@ -66,7 +66,7 @@ class CsvTest {
             """.trimIndent()
                 .replace("\n", "\r\n")
 
-        val csv = CsvWithHeader.parseCsvText(givenCsvString) as CsvWithHeader
+        val csv = CsvWithHeader.fromCsvText(givenCsvString) as CsvWithHeader
         val header = csv.allRows[0]
 
         println(csv.toCsvText())
@@ -90,7 +90,7 @@ class CsvTest {
                 "Venezuela, Bolivarian Republic of",VE
             """.trimIndent()
 
-        val csv = CsvNoHeader.parseCsvText(givenCsvString)
+        val csv = CsvNoHeader.fromCsvText(givenCsvString)
         val csvString = csv.toCsvText().trim()
 
         assertEquals(givenCsvString, csvString)
@@ -352,7 +352,7 @@ class CsvTest {
                 ZW,Zimbabwe
             """.trimIndent()
 
-        val csv = CsvWithHeader.parseCsvText(givenCsvString) as CsvWithHeader
+        val csv = CsvWithHeader.fromCsvText(givenCsvString) as CsvWithHeader
         val csvString = csv.toCsvText(escapeWhitespaces = true).trim()
 
         assertEquals(givenCsvString, csvString)

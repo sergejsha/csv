@@ -20,7 +20,7 @@ class MapColumnTest {
                 Line 3"
             """.trimIndent()
 
-        val csv = CsvWithHeader.parseCsvText(givenCsvString) as CsvWithHeader
+        val csv = CsvWithHeader.fromCsvText(givenCsvString) as CsvWithHeader
         val code = csv.header.columnByName("CODE") as CsvColumn
         val description = csv.header.columnByName("DESCRIPTION") as CsvColumn
 
