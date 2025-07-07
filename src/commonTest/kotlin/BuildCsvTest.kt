@@ -12,9 +12,9 @@ class BuildCsvTest {
 
         val csv = buildCsv {
             header {
-                value("NAME")
-                value("CODE")
-                value("DESCRIPTION")
+                column("NAME")
+                column("CODE")
+                column("DESCRIPTION")
             }
             data {
                 value("BEVERLY HILLS BLACK")
@@ -62,9 +62,9 @@ class BuildCsvTest {
 
         val csv = buildCsv {
             header {
-                value("NAME")
-                value("CODE")
-                value("DESCRIPTION")
+                column("NAME")
+                column("CODE")
+                column("DESCRIPTION")
             }
             data {
                 value("BEVERLY HILLS BLACK")

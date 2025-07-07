@@ -23,21 +23,31 @@ public class CsvBuilder @PublishedApi internal constructor(
     @PublishedApi internal val headerRows: MutableList<CsvHeaderRow>,
     @PublishedApi internal val dataRows: MutableList<CsvRow>,
 ) {
-    public inline fun header(block: CsvRowBuilder.() -> Unit) {
+    public inline fun header(block: CsvDataHeaderBuilder.() -> Unit) {
         val row = mutableListOf<String>()
-        block(CsvRowBuilder(row))
+        block(CsvDataHeaderBuilder(row))
+        headerRows.clear()
         headerRows += row.toCsvHeaderRow()
     }
 
-    public inline fun data(block: CsvRowBuilder.() -> Unit) {
+    public inline fun data(block: CsvDataRowBuilder.() -> Unit) {
         val row = mutableListOf<String>()
-        block(CsvRowBuilder(row))
+        block(CsvDataRowBuilder(row))
         dataRows += row
     }
 }
 
 @CsvDsl
-public class CsvRowBuilder @PublishedApi internal constructor(
+public class CsvDataHeaderBuilder @PublishedApi internal constructor(
+    private val row: MutableList<String>,
+) {
+    public fun column(value: String) {
+        row.add(value)
+    }
+}
+
+@CsvDsl
+public class CsvDataRowBuilder @PublishedApi internal constructor(
     private val row: MutableList<String>,
 ) {
     public fun value(value: String) {
