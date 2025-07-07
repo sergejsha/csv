@@ -169,8 +169,3 @@ public inline fun CsvDataRow.mapValueOf(column: CsvColumn, transform: (String) -
             value
         }
     }
-
-public inline fun CsvDataRow.mapValue2(header: CsvHeaderRow, transform: (CsvColumn, String) -> String): CsvDataRow =
-    header.columns.map { column ->
-        transform(column, getOrElse(column) { "" })
-    }
