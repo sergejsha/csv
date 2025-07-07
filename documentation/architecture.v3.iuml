@@ -1,0 +1,31 @@
+@startuml
+skinparam packageStyle rectangle
+hide empty members
+hide stereotype
+hide circle
+
+class Csv {
+    allRows: List<CsvRow>
+    ---
+    toCsvText(): String
+}
+
+class CsvNoHeader {
+    data: List<CsvDataRow>
+    --
+    fromCsvText(): CsvNoHeader
+    fromLists(): CsvNoHeader
+}
+
+class CsvWithHeader {
+    header: CsvHeaderRow
+    data: List<CsvDataRow>
+    --
+    fromCsvText(): CsvWithHeader?
+    fromLists(): CsvWithHeader?
+}
+
+CsvWithHeader -up-|> Csv
+CsvNoHeader -up-|> Csv
+
+@enduml

@@ -9,7 +9,7 @@ Small, fast and convenient multiplatform CSV parser and builder written for one 
 
 # Architecture
 
-<img src="http://www.plantuml.com/plantuml/proxy?cache=no&src=https://raw.githubusercontent.com/sergejsha/csv/master/documentation/architecture.v2.iuml">
+<img src="http://www.plantuml.com/plantuml/proxy?cache=no&src=https://raw.githubusercontent.com/sergejsha/csv/master/documentation/architecture.v3.iuml">
 
 # Usage
 

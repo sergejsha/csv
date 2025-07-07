@@ -1,6 +1,6 @@
 # Changelog
 
-## 1.0 - 2025.06.xx
+## 1.0 - 2025.06.07
 
 - Update to Kotlin 2.2.0
 - Change: Final API refinement (incompatible, see readme and tests for usage examples)
