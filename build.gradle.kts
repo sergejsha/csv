@@ -1,17 +1,20 @@
-import org.gradle.internal.extensions.stdlib.capitalized
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 import org.jetbrains.kotlin.gradle.tasks.KotlinJvmCompile
+import java.net.URI
+import java.net.http.HttpClient
+import java.net.http.HttpRequest
+import java.net.http.HttpResponse
+import java.util.Base64
 
 plugins {
     alias(libs.plugins.kotlin.multiplatform)
+    alias(libs.plugins.dokka)
     id("signing")
     id("maven-publish")
-    alias(libs.plugins.dokka)
-    alias(libs.plugins.publish)
 }
 
 group = "de.halfbit"
-version = "1.0.1"
+version = "1.0"
 
 repositories {
     mavenCentral()
@@ -64,45 +67,46 @@ if (canSignArtifacts) {
     }
 
     publishing {
-        publications {
-            withType<MavenPublication>().configureEach {
-                artifact(javadocJar.get())
-
-                pom {
-                    name.set(rootProject.name)
-                    description.set("Tiny Kotlin Multiplatform library for parsing and building CSV strings")
-                    url.set("https://github.com/sergejsha/${rootProject.name}")
-                    licenses {
-                        license {
-                            name.set("Apache-2.0")
-                            url.set("http://www.apache.org/licenses/LICENSE-2.0.txt")
-                        }
-                    }
-                    developers {
-                        developer {
-                            id.set("halfbit")
-                            name.set("Sergej Shafarenka")
-                            email.set("info@halfbit.de")
-                        }
-                    }
-                    scm {
-                        connection.set("scm:git:git@github.com:sergejsha/${rootProject.name}.git")
-                        developerConnection.set("scm:git:ssh://github.com:sergejsha/${rootProject.name}.git")
-                        url.set("https://github.com/sergejsha/${rootProject.name}")
-                    }
+        repositories {
+            maven {
+                name = "local"
+                url = uri("${layout.buildDirectory}/repository")
+            }
+            maven {
+                name = "central"
+                url = uri("https://ossrh-staging-api.central.sonatype.com/service/local/staging/deploy/maven2/")
+                credentials {
+                    username = project.getPropertyOrEmptyString("publishing.nexus.user")
+                    password = project.getPropertyOrEmptyString("publishing.nexus.password")
                 }
             }
         }
 
-    }
+        publications.withType<MavenPublication> {
+            artifact(javadocJar.get())
 
-    nexusPublishing {
-        repositories {
-            create("MavenCentral") {
-                nexusUrl.set(uri("https://ossrh-staging-api.central.sonatype.com/service/local/"))
-                snapshotRepositoryUrl.set(uri("https://central.sonatype.com/repository/maven-snapshots/"))
-                username.set(project.getPropertyOrEmptyString("publishing.nexus.user"))
-                password.set(project.getPropertyOrEmptyString("publishing.nexus.password"))
+            pom {
+                name.set(rootProject.name)
+                description.set("Tiny Kotlin Multiplatform library for parsing and building CSV strings")
+                url.set("https://github.com/sergejsha/${rootProject.name}")
+                licenses {
+                    license {
+                        name.set("Apache-2.0")
+                        url.set("http://www.apache.org/licenses/LICENSE-2.0.txt")
+                    }
+                }
+                developers {
+                    developer {
+                        id.set("halfbit")
+                        name.set("Sergej Shafarenka")
+                        email.set("info@halfbit.de")
+                    }
+                }
+                scm {
+                    connection.set("scm:git:git@github.com:sergejsha/${rootProject.name}.git")
+                    developerConnection.set("scm:git:ssh://github.com:sergejsha/${rootProject.name}.git")
+                    url.set("https://github.com/sergejsha/${rootProject.name}")
+                }
             }
         }
     }
@@ -118,6 +122,34 @@ if (canSignArtifacts) {
         //          https://youtrack.jetbrains.com/issue/KT-46466 is fixed
         tasks.withType<AbstractPublishToMaven>().configureEach {
             dependsOn(project.tasks.withType(Sign::class.java))
+        }
+    }
+
+    tasks.register("releaseToMavenCentral") {
+        group = "publishing"
+        description = "Publishes to staging and manually uploads to Maven Central"
+        dependsOn("publishAllPublicationsToCentralRepository")
+
+        doLast {
+            val username = project.getPropertyOrEmptyString("publishing.nexus.user")
+            val password = project.getPropertyOrEmptyString("publishing.nexus.password")
+            val bearer = Base64.getEncoder().encodeToString("$username:$password".toByteArray())
+
+            val request = HttpRequest.newBuilder()
+                .uri(URI.create("https://ossrh-staging-api.central.sonatype.com/manual/upload/defaultRepository/de.halfbit"))
+                .header("Authorization", "Bearer $bearer")
+                .POST(HttpRequest.BodyPublishers.noBody())
+                .build()
+
+            val response = HttpClient
+                .newHttpClient()
+                .send(request, HttpResponse.BodyHandlers.ofString())
+
+            if (response.statusCode() != 200) {
+                throw GradleException("Manual upload failed ${response.statusCode()}:[${response.body()}]")
+            } else {
+                println("✅ Published and uploaded to Maven Central successfully.")
+            }
         }
     }
 }
