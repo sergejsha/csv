@@ -1,5 +1,10 @@
 # Changelog
 
+## 1.0 - 2025.06.07
+
+- Update to Kotlin 2.2.0
+- Change: Final API refinement (incompatible, see readme and tests for usage examples)
+
 ## 0.17 - 2025-05-04
 ### Fixed
 - Issue #24 (Improve headers and rows detection)

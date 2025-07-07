@@ -9,43 +9,59 @@ Small, fast and convenient multiplatform CSV parser and builder written for one 
 
 # Architecture
 
-<img src="http://www.plantuml.com/plantuml/proxy?cache=no&src=https://raw.githubusercontent.com/sergejsha/csv/master/documentation/architecture.v2.iuml">
+<img src="http://www.plantuml.com/plantuml/proxy?cache=no&src=https://raw.githubusercontent.com/sergejsha/csv/master/documentation/architecture.v3.iuml">
 
 # Usage
 
 Here is what you can do with the library:
 ```kotlin
 
-// (1) Build a CSV file using simple DSL
+// (1) build csv
 val csv = buildCsv {
-    row {
-        value("Code")
-        value("Name")
+    header {
+        column("Code")
+        column("Name")
     }
-    row {
+    data {
         value("DE")
-        value("Germany")
+        value("Deutschland")
     }
-    row {
+    data {
         value("BY")
         value("Belarus")
     }
-}
+} as CsvWithHeader
 
-// (2) Export a CSV object to a CSV string
+val code = csv.header.columnByName("Code") as CsvColumn
+val name = csv.header.columnByName("Name") as CsvColumn
+
+assertEquals(code, CsvColumn(0, "Code"))
+assertEquals(name, CsvColumn(1, "Name"))
+assertEquals(csv.data[0][code], "DE")
+assertEquals(csv.data[0][name], "Deutschland")
+assertEquals(csv.data[1][code], "BY")
+assertEquals(csv.data[1][name], "Belarus")
+
+// (2) csv to text
 val csvText = csv.toCsvText()
+assertEquals("Code,Name\nDE,Deutschland\nBY,Belarus\n", csvText)
 
-// (3) Parse a CSV string to get a CSV object
-val csv2 = Csv.parseCsvText(csvText)
+// (3) parse csv text
+val csv2 = CsvWithHeader.parseCsvText(csvText) as CsvWithHeader
 
-// There are the data structures supported by the library 
-val allRows: List<Row> = csv2.rows
-val header: HeaderRow = csv2.header
-val data: List<DataRow> = csv2.data
+assertEquals(csv.header, csv2.header)
+assertEquals(csv.data, csv2.data)
+assertEquals(csv.allRows, csv2.allRows)
 
-// (4) Transform CSV data
-val codes = data.map { it.value("Code") } // ["DE", "BY"]
-val names = data.map { it.value("Name") } // ["Germany", "Belarus"]
+// (4) transform csv
+val csv3 = csv.copy(
+    data = csv.data.map { row ->
+        row.mapValueOf(name) { value ->
+            if (value == "Belarus") "Weißrussland" else value
+        }
+    }
+)
+assertEquals("Code,Name\nDE,Deutschland\nBY,Weißrussland\n", csv3.toCsvText())
 ```
 
 # Dependencies
@@ -53,8 +69,8 @@ val names = data.map { it.value("Name") } // ["Germany", "Belarus"]
 In `gradle/libs.versions.toml`
 ```toml
 [versions]
-kotlin = "2.1.20"
-csv = "0.17"
+kotlin = "2.2.0"
+csv = "1.0"
 
 [libraries]
 csv = { module = "de.halfbit:csv", version.ref = "csv" }

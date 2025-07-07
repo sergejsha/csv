@@ -1,18 +1,23 @@
-/** Copyright 2023 Halfbit GmbH, Sergej Shafarenka */
+/** Copyright 2023-2025 Halfbit GmbH, Sergej Shafarenka */
 package de.halfbit.csv
 
-import de.halfbit.csv.BaseCsv.Row
-
 /**
- * Object with comma-separated values stored as list of [Row]'s. Each row is a list
- * of strings. Empty values are empty strings.
+ * Base class for CSV data, containing all rows of the CSV file.
  *
- * If your CSV-data has header row, use [BaseCsv] instead of this base type.
+ * @property allRows all rows in the CSV file, including header if present
  */
-public interface BaseCsv {
-    public val allRows: List<Row>
+public abstract class Csv(
+    public val allRows: List<CsvRow>,
+) {
+    public abstract val data: List<CsvDataRow>
 
-    // Multiline issue: https://stackoverflow.com/questions/2668678/importing-csv-with-line-breaks-in-excel-2007
+    /**
+     * Converts the CSV data to a CSV-formatted string.
+     *
+     * @param newLine the line separator to use
+     * @param escapeWhitespaces whether to escape whitespaces in values
+     * @return the CSV-formatted string representation
+     */
     public fun toCsvText(
         newLine: NewLine = NewLine.LF,
         escapeWhitespaces: Boolean = false,
@@ -28,61 +33,28 @@ public interface BaseCsv {
             append(newLine.value)
         }
     }
-
-    public interface Row : List<String> {
-        public fun replaceValue(valueIndex: Int, newValue: String): Row
-    }
 }
+
+/** Represents a single row in a CSV file as a list of string values. */
+public typealias CsvRow = List<String>
+
+/** Represents a data row in a CSV file, excluding the header row. */
+public typealias CsvDataRow = List<String>
 
 /**
- * CSV-object  by with a mandatory header row. It has more convenient methods
- * for working with columns by their names.
+ * Specifies the line separator used in CSV output.
+ *
+ * @property value the string value of the line separator
  */
-public interface Csv : BaseCsv {
-    public val header: HeaderRow
-    public val data: List<DataRow>
-
-    public interface HeaderRow : Row {
-        public fun indexOfColumn(name: String): Int
-    }
-
-    public interface DataRow : Row {
-        public fun value(columnName: String): String
-        public fun replaceValue(columnName: String, newValue: String): DataRow
-    }
-
-    public companion object {
-        /** Use it for parsing a cvs-formatted text. */
-        public fun parserCsvText(csvText: String): Csv = parseCsv(csvText)
-
-        @Deprecated(
-            message = "Replaced with the more consistently named 'parserCsvText()' method." +
-                    " This method will be removed in 0.18, please migrate.",
-            replaceWith = ReplaceWith("parserCsvText(csvText)"),
-        )
-        public fun parserText(csvText: String): Csv = parseCsv(csvText)
-
-        public fun fromLists(allRows: List<List<String>>): BaseCsv {
-            return BaseCsv(allRows.map { DefaultRow(it) })
-        }
-
-        public fun fromLists(header: List<String>, data: List<List<String>>): Csv {
-            val headerRow = DefaultHeaderRow(header)
-            return Csv(
-                header = headerRow,
-                data = data.map { DefaultDataRow(it, headerRow) },
-            )
-        }
-    }
-}
-
 public enum class NewLine(
     public val value: String,
 ) {
     /** Line feed as the line terminator */
     LF("\n"),
+
     /** Carriage Return + Line feed as the line terminator */
     CRLF("\r\n"),
+
     /** Carriage Return as the line terminator */
     CR("\r")
 }

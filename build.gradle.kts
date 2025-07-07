@@ -8,7 +8,7 @@ plugins {
 }
 
 group = "de.halfbit"
-version = "0.17"
+version = "1.0"
 
 repositories {
     mavenCentral()
@@ -67,15 +67,7 @@ if (canPublishToMaven) {
             }
             maven {
                 name = "central"
-                url = uri("https://oss.sonatype.org/service/local/staging/deploy/maven2/")
-                credentials {
-                    username = project.getPropertyOrEmptyString("publishing.nexus.user")
-                    password = project.getPropertyOrEmptyString("publishing.nexus.password")
-                }
-            }
-            maven {
-                name = "snapshot"
-                url = uri("https://oss.sonatype.org/content/repositories/snapshots")
+                url = uri("https://ossrh-staging-api.central.sonatype.com/service/local/staging/deploy/maven2/")
                 credentials {
                     username = project.getPropertyOrEmptyString("publishing.nexus.user")
                     password = project.getPropertyOrEmptyString("publishing.nexus.password")

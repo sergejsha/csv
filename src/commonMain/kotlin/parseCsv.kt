@@ -1,11 +1,12 @@
-/** Copyright 2023 Halfbit GmbH, Sergej Shafarenka */
+/** Copyright 2023-2025 Halfbit GmbH, Sergej Shafarenka */
 package de.halfbit.csv
 
-import de.halfbit.csv.Csv.DataRow
-import de.halfbit.csv.Csv.HeaderRow
 import de.halfbit.csv.Lexer.*
 
-internal fun parseCsv(csvText: String): Csv {
+internal fun parseCsv(
+    csvText: String,
+    withHeaderRow: Boolean = true,
+): Pair<CsvHeaderRow?, List<CsvDataRow>> {
     var pos = 0
     var lexer: Lexer = BeforeValue
 
@@ -16,8 +17,8 @@ internal fun parseCsv(csvText: String): Csv {
 
     val value = StringBuilder()
     val row = mutableListOf<String>()
-    val header = mutableListOf<HeaderRow>()
-    val data = mutableListOf<DataRow>()
+    var header: CsvHeaderRow? = null
+    val data = mutableListOf<CsvDataRow>()
 
     fun completeValue() {
         row.add(value.toString())
@@ -25,10 +26,10 @@ internal fun parseCsv(csvText: String): Csv {
     }
 
     fun completeRow() {
-        if (header.isEmpty()) {
-            header += DefaultHeaderRow(row.toList())
+        if (withHeaderRow && header == null) {
+            header = row.toCsvHeaderRow()
         } else {
-            data += DefaultDataRow(row.toList(), header[0])
+            data += row.toList()
         }
         row.clear()
     }
@@ -150,8 +151,7 @@ internal fun parseCsv(csvText: String): Csv {
         completeRow()
     }
 
-    val headerRow = header.getOrNull(0) ?: DefaultHeaderRow(emptyList())
-    return Csv(headerRow, data)
+    return header to data
 }
 
 private enum class Lexer {

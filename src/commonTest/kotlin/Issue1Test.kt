@@ -1,4 +1,4 @@
-/** Copyright 2023 Halfbit GmbH, Sergej Shafarenka */
+/** Copyright 2023-2025 Halfbit GmbH, Sergej Shafarenka */
 package de.halfbit.csv
 
 import kotlin.test.Test
@@ -17,7 +17,7 @@ class Issue1Test {
                 1999,Chevy,Venture,
             """.trimIndent()
 
-        val csv = parseCsv(givenCsvString)
+        val csv = CsvWithHeader.fromCsvText(givenCsvString) as CsvWithHeader
         assertEquals(3, csv.allRows.size)
         assertContentEquals(listOf("1999", "Chevy", "Venture", ""), csv.allRows[2])
     }
