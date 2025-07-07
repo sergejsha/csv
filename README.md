@@ -19,8 +19,8 @@ Here is what you can do with the library:
 // (1) build csv
 val csv = buildCsv {
     header {
-        value("Code")
-        value("Name")
+        column("Code")
+        column("Name")
     }
     data {
         value("DE")
