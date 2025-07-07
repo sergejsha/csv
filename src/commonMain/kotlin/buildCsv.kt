@@ -49,6 +49,6 @@ public class CsvRowBuilder @PublishedApi internal constructor(
 internal fun List<String>.toCsvHeaderRow(): CsvHeaderRow =
     CsvHeaderRow(
         mapIndexed { index, name ->
-            CsvHeader(index, name)
+            CsvColumn(index, name)
         }
     )

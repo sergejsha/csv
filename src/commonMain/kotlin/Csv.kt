@@ -1,47 +1,23 @@
 /** Copyright 2023-2025 Halfbit GmbH, Sergej Shafarenka */
 package de.halfbit.csv
 
-public typealias CsvRow = List<String>
-public typealias CsvDataRow = List<String>
-
-public operator fun CsvDataRow.get(header: CsvHeader): String =
-    get(header.index)
-
-public fun CsvDataRow.getOrNull(header: CsvHeader): String? =
-    getOrNull(header.index)
-
-public fun CsvDataRow.getOrEmpty(header: CsvHeader): String? =
-    getOrNull(header.index) ?: ""
-
-public inline fun CsvDataRow.getOrElse(header: CsvHeader, defaultValue: (CsvHeader) -> String): String =
-    getOrElse(header.index) { defaultValue(header) }
-
-public inline fun CsvDataRow.mapValue(header: CsvHeader, transform: (String) -> String): List<String> =
-    mapIndexed { index, value ->
-        if (index == header.index) {
-            transform(value)
-        } else {
-            value
-        }
-    }
-
-public data class CsvHeader(
-    public val index: Int,
-    public val name: String,
-)
-
-public data class CsvHeaderRow(
-    private val headers: List<CsvHeader>,
-) : List<CsvHeader> by headers {
-    private val headersByName = headers.associateBy { it.name }
-    public fun headerByName(name: String): CsvHeader? = headersByName[name]
-    public fun headerByIndex(index: Int): CsvHeader? = headers.getOrNull(index)
-}
-
+/**
+ * Base class for CSV data, containing all rows of the CSV file.
+ *
+ * @property allRows all rows in the CSV file, including header if present
+ */
 public abstract class Csv(
     public val allRows: List<CsvRow>,
 ) {
-    // Multiline issue: https://stackoverflow.com/questions/2668678/importing-csv-with-line-breaks-in-excel-2007
+    public abstract val data: List<CsvDataRow>
+
+    /**
+     * Converts the CSV data to a CSV-formatted string.
+     *
+     * @param newLine the line separator to use
+     * @param escapeWhitespaces whether to escape whitespaces in values
+     * @return the CSV-formatted string representation
+     */
     public fun toCsvText(
         newLine: NewLine = NewLine.LF,
         escapeWhitespaces: Boolean = false,
@@ -59,63 +35,17 @@ public abstract class Csv(
     }
 }
 
-public class CsvWithHeader(
-    public val header: CsvHeaderRow,
-    public val data: List<CsvDataRow>,
-) : Csv(listOf(header.map { it.name }) + data) {
+/** Represents a single row in a CSV file as a list of string values. */
+public typealias CsvRow = List<String>
 
-    override fun toString(): String =
-        buildString {
-            append(header)
-            append("\n")
-            data.forEach { data ->
-                append(data)
-                append("\n")
-            }
-        }
+/** Represents a data row in a CSV file, excluding the header row. */
+public typealias CsvDataRow = List<String>
 
-    public companion object {
-        public fun parseCsvText(csvText: String): CsvWithHeader? {
-            val (header, data) = parseCsv(csvText, true)
-            return if (header == null) null else {
-                CsvWithHeader(header, data)
-            }
-        }
-
-        public fun fromLists(allRows: List<List<String>>): CsvWithHeader? {
-            val headerRowNames = allRows.getOrNull(0)
-            return if (headerRowNames == null) null else {
-                val headerRow = headerRowNames.toCsvHeaderRow()
-                CsvWithHeader(headerRow, allRows.subList(1, allRows.size))
-            }
-        }
-    }
-}
-
-public class CsvNoHeader(
-    public val data: List<CsvDataRow>,
-) : Csv(data) {
-
-    override fun toString(): String =
-        buildString {
-            data.forEach { data ->
-                append(data)
-                append("\n")
-            }
-        }
-
-    public companion object {
-        public fun parseCsvText(csvText: String): CsvNoHeader {
-            val (_, data) = parseCsv(csvText, false)
-            return CsvNoHeader(data)
-        }
-
-        public fun fromLists(allRows: List<List<String>>): CsvNoHeader {
-            return CsvNoHeader(allRows)
-        }
-    }
-}
-
+/**
+ * Specifies the line separator used in CSV output.
+ *
+ * @property value the string value of the line separator
+ */
 public enum class NewLine(
     public val value: String,
 ) {

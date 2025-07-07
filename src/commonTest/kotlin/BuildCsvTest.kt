@@ -34,14 +34,14 @@ class BuildCsvTest {
 
         val header = csv.header
 
-        val name = header.headerByName("NAME") as CsvHeader
-        assertEquals(CsvHeader(0, "NAME"), name)
+        val name = header.columnByName("NAME") as CsvColumn
+        assertEquals(CsvColumn(0, "NAME"), name)
 
-        val code = header.headerByName("CODE") as CsvHeader
-        assertEquals(CsvHeader(1, "CODE"), code)
+        val code = header.columnByName("CODE") as CsvColumn
+        assertEquals(CsvColumn(1, "CODE"), code)
 
-        val description = header.headerByName("DESCRIPTION") as CsvHeader
-        assertEquals(CsvHeader(2, "DESCRIPTION"), description)
+        val description = header.columnByName("DESCRIPTION") as CsvColumn
+        assertEquals(CsvColumn(2, "DESCRIPTION"), description)
         assertEquals(csv.data.size, 3)
 
         assertEquals("BEVERLY HILLS BLACK", csv.data[0].getOrEmpty(name))
@@ -82,7 +82,7 @@ class BuildCsvTest {
             }
         } as CsvWithHeader
 
-        val description = csv.header.headerByName("DESCRIPTION") as CsvHeader
+        val description = csv.header.columnByName("DESCRIPTION") as CsvColumn
         val descriptions = csv.data.map { it.getOrNull(description) }
         val expectedDescriptions = listOf(null, "", "PU pouch for eyewear in black cardboard box")
         assertEquals(expectedDescriptions, descriptions)

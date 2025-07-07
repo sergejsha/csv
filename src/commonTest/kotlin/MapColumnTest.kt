@@ -4,7 +4,7 @@ package de.halfbit.csv
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
-class MapValueTest {
+class MapColumnTest {
 
     @Test
     fun mapValue() {
@@ -21,18 +21,18 @@ class MapValueTest {
             """.trimIndent()
 
         val csv = CsvWithHeader.parseCsvText(givenCsvString) as CsvWithHeader
-        val code = csv.header.headerByName("CODE") as CsvHeader
-        val description = csv.header.headerByName("DESCRIPTION") as CsvHeader
-        val data = csv.data.map { row ->
-            val codeValue = row[code]
-            if (!codeValue.startsWith("PKG.")) {
-                row.mapValue(description) { "" }
-            } else {
-                row
-            }
-        }
+        val code = csv.header.columnByName("CODE") as CsvColumn
+        val description = csv.header.columnByName("DESCRIPTION") as CsvColumn
 
-        val csv2 = CsvWithHeader(csv.header, data)
+        val csv2 = csv.copy(
+            data = csv.data.map { row ->
+                if (!row[code].startsWith("PKG.")) {
+                    row.mapValueOf(description) { "" }
+                } else {
+                    row
+                }
+            }
+        )
         println(csv2.toCsvText())
 
         assertEquals("", csv2.data[0][description.index])
