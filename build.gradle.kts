@@ -1,14 +1,17 @@
+import org.gradle.internal.extensions.stdlib.capitalized
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 import org.jetbrains.kotlin.gradle.tasks.KotlinJvmCompile
 
 plugins {
     alias(libs.plugins.kotlin.multiplatform)
-    id("maven-publish")
     id("signing")
+    id("maven-publish")
+    alias(libs.plugins.dokka)
+    alias(libs.plugins.publish)
 }
 
 group = "de.halfbit"
-version = "1.0"
+version = "1.0.1"
 
 repositories {
     mavenCentral()
@@ -51,101 +54,73 @@ tasks.withType<KotlinJvmCompile>().configureEach {
     }
 }
 
-val canPublishToMaven = project.hasProperty("signing.keyId")
-if (canPublishToMaven) {
+val canSignArtifacts = project.hasProperty("signing.keyId")
+if (canSignArtifacts) {
 
     val javadocJar by tasks.registering(Jar::class) {
         archiveClassifier.set("javadoc")
+        dependsOn(tasks.named("dokkaGeneratePublicationHtml"))
+        from(layout.buildDirectory.dir("dokka/html"))
     }
 
     publishing {
+        publications {
+            withType<MavenPublication>().configureEach {
+                artifact(javadocJar.get())
 
+                pom {
+                    name.set(rootProject.name)
+                    description.set("Tiny Kotlin Multiplatform library for parsing and building CSV strings")
+                    url.set("https://github.com/sergejsha/${rootProject.name}")
+                    licenses {
+                        license {
+                            name.set("Apache-2.0")
+                            url.set("http://www.apache.org/licenses/LICENSE-2.0.txt")
+                        }
+                    }
+                    developers {
+                        developer {
+                            id.set("halfbit")
+                            name.set("Sergej Shafarenka")
+                            email.set("info@halfbit.de")
+                        }
+                    }
+                    scm {
+                        connection.set("scm:git:git@github.com:sergejsha/${rootProject.name}.git")
+                        developerConnection.set("scm:git:ssh://github.com:sergejsha/${rootProject.name}.git")
+                        url.set("https://github.com/sergejsha/${rootProject.name}")
+                    }
+                }
+            }
+        }
+
+    }
+
+    nexusPublishing {
         repositories {
-            maven {
-                name = "local"
-                url = uri("${layout.buildDirectory}/repository")
+            create("MavenCentral") {
+                nexusUrl.set(uri("https://ossrh-staging-api.central.sonatype.com/service/local/"))
+                snapshotRepositoryUrl.set(uri("https://central.sonatype.com/repository/maven-snapshots/"))
+                username.set(project.getPropertyOrEmptyString("publishing.nexus.user"))
+                password.set(project.getPropertyOrEmptyString("publishing.nexus.password"))
             }
-            maven {
-                name = "central"
-                url = uri("https://ossrh-staging-api.central.sonatype.com/service/local/staging/deploy/maven2/")
-                credentials {
-                    username = project.getPropertyOrEmptyString("publishing.nexus.user")
-                    password = project.getPropertyOrEmptyString("publishing.nexus.password")
-                }
-            }
-        }
-
-        publications.withType<MavenPublication> {
-            artifact(javadocJar.get())
-
-            pom {
-                name.set(rootProject.name)
-                description.set("Tiny Kotlin Multiplatform library for parsing, building and exporting CSV files")
-                url.set("https://www.halfbit.de")
-                licenses {
-                    license {
-                        name.set("Apache-2.0")
-                        url.set("http://www.apache.org/licenses/LICENSE-2.0.txt")
-                    }
-                }
-                developers {
-                    developer {
-                        id.set("halfbit")
-                        name.set("Sergej Shafarenka")
-                        email.set("info@halfbit.de")
-                    }
-                }
-                scm {
-                    connection.set("scm:git:git@github.com:sergejsha/${rootProject.name}.git")
-                    developerConnection.set("scm:git:ssh://github.com:sergejsha/${rootProject.name}.git")
-                    url.set("https://www.halfbit.de")
-                }
-            }
-        }
-
-        publications.forEach { publication ->
-            signing.sign(publication)
         }
     }
 
     signing {
-        sign(publishing.publications)
+        publishing.publications.withType<MavenPublication>().configureEach {
+            sign(this)
+        }
     }
 
-    // more dependencies fixes
-    tasks {
-        "compileTestKotlinIosSimulatorArm64" {
-            mustRunAfter("signIosSimulatorArm64Publication")
-        }
-        "compileTestKotlinIosX64" {
-            mustRunAfter("signIosX64Publication")
-        }
-        "compileTestKotlinIosArm64" {
-            mustRunAfter("signIosArm64Publication")
-        }
-        "compileTestKotlinLinuxX64" {
-            mustRunAfter("signLinuxX64Publication")
-        }
-        "compileTestKotlinLinuxArm64" {
-            mustRunAfter("signLinuxArm64Publication")
-        }
-        "compileTestKotlinMacosX64" {
-            mustRunAfter("signMacosX64Publication")
-        }
-        "compileTestKotlinMacosArm64" {
-            mustRunAfter("signMacosArm64Publication")
-        }
-        "compileTestKotlinMingwX64" {
-            mustRunAfter("signMingwX64Publication")
+    afterEvaluate {
+        // fix for: https://github.com/gradle/gradle/issues/26091
+        //          https://youtrack.jetbrains.com/issue/KT-46466 is fixed
+        tasks.withType<AbstractPublishToMaven>().configureEach {
+            dependsOn(project.tasks.withType(Sign::class.java))
         }
     }
 }
 
-// fix for: https://github.com/gradle/gradle/issues/26091
-//          https://youtrack.jetbrains.com/issue/KT-46466 is fixed
-tasks.withType<AbstractPublishToMaven>().configureEach {
-    dependsOn(project.tasks.withType(Sign::class.java))
-}
-
-fun Project.getPropertyOrEmptyString(name: String): String =
+private fun Project.getPropertyOrEmptyString(name: String): String =
     if (hasProperty(name)) property(name) as String? ?: "" else ""
