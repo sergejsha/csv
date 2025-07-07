@@ -1,10 +1,16 @@
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 import org.jetbrains.kotlin.gradle.tasks.KotlinJvmCompile
+import java.net.URI
+import java.net.http.HttpClient
+import java.net.http.HttpRequest
+import java.net.http.HttpResponse
+import java.util.Base64
 
 plugins {
     alias(libs.plugins.kotlin.multiplatform)
-    id("maven-publish")
+    alias(libs.plugins.dokka)
     id("signing")
+    id("maven-publish")
 }
 
 group = "de.halfbit"
@@ -51,15 +57,16 @@ tasks.withType<KotlinJvmCompile>().configureEach {
     }
 }
 
-val canPublishToMaven = project.hasProperty("signing.keyId")
-if (canPublishToMaven) {
+val canSignArtifacts = project.hasProperty("signing.keyId")
+if (canSignArtifacts) {
 
     val javadocJar by tasks.registering(Jar::class) {
         archiveClassifier.set("javadoc")
+        dependsOn(tasks.named("dokkaGeneratePublicationHtml"))
+        from(layout.buildDirectory.dir("dokka/html"))
     }
 
     publishing {
-
         repositories {
             maven {
                 name = "local"
@@ -80,8 +87,8 @@ if (canPublishToMaven) {
 
             pom {
                 name.set(rootProject.name)
-                description.set("Tiny Kotlin Multiplatform library for parsing, building and exporting CSV files")
-                url.set("https://www.halfbit.de")
+                description.set("Tiny Kotlin Multiplatform library for parsing and building CSV strings")
+                url.set("https://github.com/sergejsha/${rootProject.name}")
                 licenses {
                     license {
                         name.set("Apache-2.0")
@@ -98,54 +105,54 @@ if (canPublishToMaven) {
                 scm {
                     connection.set("scm:git:git@github.com:sergejsha/${rootProject.name}.git")
                     developerConnection.set("scm:git:ssh://github.com:sergejsha/${rootProject.name}.git")
-                    url.set("https://www.halfbit.de")
+                    url.set("https://github.com/sergejsha/${rootProject.name}")
                 }
             }
-        }
-
-        publications.forEach { publication ->
-            signing.sign(publication)
         }
     }
 
     signing {
-        sign(publishing.publications)
+        publishing.publications.withType<MavenPublication>().configureEach {
+            sign(this)
+        }
     }
 
-    // more dependencies fixes
-    tasks {
-        "compileTestKotlinIosSimulatorArm64" {
-            mustRunAfter("signIosSimulatorArm64Publication")
+    afterEvaluate {
+        // fix for: https://github.com/gradle/gradle/issues/26091
+        //          https://youtrack.jetbrains.com/issue/KT-46466 is fixed
+        tasks.withType<AbstractPublishToMaven>().configureEach {
+            dependsOn(project.tasks.withType(Sign::class.java))
         }
-        "compileTestKotlinIosX64" {
-            mustRunAfter("signIosX64Publication")
-        }
-        "compileTestKotlinIosArm64" {
-            mustRunAfter("signIosArm64Publication")
-        }
-        "compileTestKotlinLinuxX64" {
-            mustRunAfter("signLinuxX64Publication")
-        }
-        "compileTestKotlinLinuxArm64" {
-            mustRunAfter("signLinuxArm64Publication")
-        }
-        "compileTestKotlinMacosX64" {
-            mustRunAfter("signMacosX64Publication")
-        }
-        "compileTestKotlinMacosArm64" {
-            mustRunAfter("signMacosArm64Publication")
-        }
-        "compileTestKotlinMingwX64" {
-            mustRunAfter("signMingwX64Publication")
+    }
+
+    tasks.register("releaseToMavenCentral") {
+        group = "publishing"
+        description = "Publishes to staging and manually uploads to Maven Central"
+        dependsOn("publishAllPublicationsToCentralRepository")
+
+        doLast {
+            val username = project.getPropertyOrEmptyString("publishing.nexus.user")
+            val password = project.getPropertyOrEmptyString("publishing.nexus.password")
+            val bearer = Base64.getEncoder().encodeToString("$username:$password".toByteArray())
+
+            val request = HttpRequest.newBuilder()
+                .uri(URI.create("https://ossrh-staging-api.central.sonatype.com/manual/upload/defaultRepository/de.halfbit"))
+                .header("Authorization", "Bearer $bearer")
+                .POST(HttpRequest.BodyPublishers.noBody())
+                .build()
+
+            val response = HttpClient
+                .newHttpClient()
+                .send(request, HttpResponse.BodyHandlers.ofString())
+
+            if (response.statusCode() != 200) {
+                throw GradleException("Manual upload failed ${response.statusCode()}:[${response.body()}]")
+            } else {
+                println("✅ Published and uploaded to Maven Central successfully.")
+            }
         }
     }
 }
 
-// fix for: https://github.com/gradle/gradle/issues/26091
-//          https://youtrack.jetbrains.com/issue/KT-46466 is fixed
-tasks.withType<AbstractPublishToMaven>().configureEach {
-    dependsOn(project.tasks.withType(Sign::class.java))
-}
-
-fun Project.getPropertyOrEmptyString(name: String): String =
+private fun Project.getPropertyOrEmptyString(name: String): String =
     if (hasProperty(name)) property(name) as String? ?: "" else ""
