@@ -101,13 +101,16 @@ public data class CsvColumn(
 )
 
 /**
- * Returns the value from this row corresponding to the given [column].
+ * Same as [getOrEmpty]
+ *
+ * Returns the value from this row for the given [column], or an
+ * empty string if not present.
  *
  * @param column the column to retrieve the value for
- * @return the value at the column's index
+ * @return the value at the column's index, or an empty string if not present
  */
 public operator fun CsvDataRow.get(column: CsvColumn): String =
-    get(column.index)
+    getOrEmpty(column)
 
 /**
  * Returns the value from this row for the given [column], or `null` if
@@ -126,7 +129,7 @@ public fun CsvDataRow.getOrNull(column: CsvColumn): String? =
  * @param column the column to retrieve the value for
  * @return the value at the column's index, or an empty string if not present
  */
-public fun CsvDataRow.getOrEmpty(column: CsvColumn): String? =
+public fun CsvDataRow.getOrEmpty(column: CsvColumn): String =
     getOrNull(column.index) ?: ""
 
 /**
