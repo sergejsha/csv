@@ -1,5 +1,10 @@
 # Changelog
 
+## 1.1 - 2025.06.09
+
+- Change: CsvDataRow.get() never throws IndexOutOfBounds but works as CsvDataRow.getOrEmpty() instead
+- Change: CsvDataRow.getOrEmpty() never returns null
+
 ## 1.0 - 2025.06.07
 
 - Update to Kotlin 2.2.0

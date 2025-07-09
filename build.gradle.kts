@@ -14,7 +14,7 @@ plugins {
 }
 
 group = "de.halfbit"
-version = "1.0"
+version = "1.1"
 
 repositories {
     mavenCentral()
@@ -76,8 +76,8 @@ if (canSignArtifacts) {
                 name = "central"
                 url = uri("https://ossrh-staging-api.central.sonatype.com/service/local/staging/deploy/maven2/")
                 credentials {
-                    username = project.getPropertyOrEmptyString("publishing.nexus.user")
-                    password = project.getPropertyOrEmptyString("publishing.nexus.password")
+                    username = project.getPropertyOrEmpty("publishing.nexus.user")
+                    password = project.getPropertyOrEmpty("publishing.nexus.password")
                 }
             }
         }
@@ -99,7 +99,8 @@ if (canSignArtifacts) {
                     developer {
                         id.set("halfbit")
                         name.set("Sergej Shafarenka")
-                        email.set("info@halfbit.de")
+                        organization.set("Halfbit GmbH")
+                        organizationUrl.set("http://www.halfbit.de")
                     }
                 }
                 scm {
@@ -131,8 +132,8 @@ if (canSignArtifacts) {
         dependsOn("publishAllPublicationsToCentralRepository")
 
         doLast {
-            val username = project.getPropertyOrEmptyString("publishing.nexus.user")
-            val password = project.getPropertyOrEmptyString("publishing.nexus.password")
+            val username = project.getPropertyOrEmpty("publishing.nexus.user")
+            val password = project.getPropertyOrEmpty("publishing.nexus.password")
             val bearer = Base64.getEncoder().encodeToString("$username:$password".toByteArray())
 
             val request = HttpRequest.newBuilder()
@@ -148,11 +149,14 @@ if (canSignArtifacts) {
             if (response.statusCode() != 200) {
                 throw GradleException("Manual upload failed ${response.statusCode()}:[${response.body()}]")
             } else {
-                println("✅ Published and uploaded to Maven Central successfully.")
+                println(
+                    "✅ Published and uploaded to Maven Central successfully." +
+                            " Release to public at https://central.sonatype.com/publishing"
+                )
             }
         }
     }
 }
 
-private fun Project.getPropertyOrEmptyString(name: String): String =
+private fun Project.getPropertyOrEmpty(name: String): String =
     if (hasProperty(name)) property(name) as String? ?: "" else ""
