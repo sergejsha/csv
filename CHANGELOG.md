@@ -1,5 +1,9 @@
 # Changelog
 
+## 1.2 - 2025.11.20
+
+- Issue #33: Fix parsing when fields are quoted and rows are terminated with CRLF
+
 ## 1.1 - 2025.06.09
 
 - Change: CsvDataRow.get() never throws IndexOutOfBounds but works as CsvDataRow.getOrEmpty() instead
