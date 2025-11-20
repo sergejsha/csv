@@ -43,6 +43,15 @@ internal fun parseCsv(
                     completeValue()
                     BeforeValue
                 }
+                '\r' -> {
+                    if (nextChar() == '\n') {
+                        pos++
+                    }
+                    if (row.isNotEmpty()) {
+                        completeRow()
+                    }
+                    BeforeValue
+                }
                 '\n' -> {
                     if (row.isNotEmpty()) {
                         completeRow()

@@ -72,6 +72,39 @@ class CsvTest {
         println(csv.toCsvText())
         assertEquals(3, csv.allRows.size)
 
+        val columnCount = header.size
+        assertEquals(3, columnCount)
+
+        val nameIndex = header.indexOf("NAME")
+        assertEquals(0, nameIndex)
+
+        val codeIndex = header.indexOf("CODE")
+        assertEquals(1, codeIndex)
+
+        val descriptionIndex = header.indexOf("DESCRIPTION")
+        assertEquals(2, descriptionIndex)
+    }
+
+    @Test
+    fun parseQuotedHeaderWhenNewLineIsRN() {
+
+        val givenCsvString =
+            """
+                "NAME","CODE","DESCRIPTION"
+                "BURGUNDY PINK","4PK.GD-S7","Pink burgundy"
+                "HILLS PINK","BVH.5-NAR.S8","Pink hills"
+            """.trimIndent()
+                .replace("\n", "\r\n")
+
+        val csv = CsvWithHeader.fromCsvText(givenCsvString) as CsvWithHeader
+        val header = csv.allRows[0]
+
+        println(csv.toCsvText())
+        assertEquals(3, csv.allRows.size)
+
+        val columnCount = header.size
+        assertEquals(3, columnCount)
+
         val nameIndex = header.indexOf("NAME")
         assertEquals(0, nameIndex)
 
