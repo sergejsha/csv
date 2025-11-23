@@ -8,13 +8,14 @@ internal fun parseCsv(
     withHeaderRow: Boolean = true,
 ): Pair<CsvHeaderRow?, List<CsvDataRow>> {
     var pos = 0
-    var lexer: Lexer = BeforeValue
+    var lexer: Lexer = SimpleValue
 
     fun nextChar(): Char? {
         val nextPos = pos + 1
         return if (nextPos < csvText.length) csvText[nextPos] else null
     }
 
+    var valueStarted = false
     val value = StringBuilder()
     val row = mutableListOf<String>()
     var header: CsvHeaderRow? = null
@@ -23,6 +24,7 @@ internal fun parseCsv(
     fun completeValue() {
         row.add(value.toString())
         value.clear()
+        valueStarted = false
     }
 
     fun completeRow() {
@@ -37,122 +39,85 @@ internal fun parseCsv(
     while (pos < csvText.length) {
         val char = csvText[pos]
         lexer = when (lexer) {
-            BeforeValue -> when (char) {
-                '"' -> InsideEscapedValue
+            SimpleValue -> when (char) {
+                '"' -> {
+                    valueStarted = true
+                    QuotedValue
+                }
                 ',' -> {
                     completeValue()
-                    BeforeValue
+                    valueStarted = true
+                    SimpleValue
                 }
                 '\r' -> {
                     if (nextChar() == '\n') {
                         pos++
                     }
+                    if (valueStarted) {
+                        completeValue()
+                    }
                     if (row.isNotEmpty()) {
                         completeRow()
                     }
-                    BeforeValue
+                    valueStarted = false
+                    SimpleValue
                 }
                 '\n' -> {
+                    if (valueStarted) {
+                        completeValue()
+                    }
                     if (row.isNotEmpty()) {
                         completeRow()
                     }
-                    BeforeValue
+                    SimpleValue
                 }
                 else -> {
                     value.append(char)
-                    InsideValue
+                    SimpleValue
                 }
             }
-            InsideValue -> when (char) {
-                ',' -> {
-                    completeValue()
-                    BeforeValue
-                }
-                '\r' -> {
-                    if (nextChar() == '\n') {
-                        pos++
-                    }
-                    completeValue()
-                    completeRow()
-                    BeforeValue
-                }
-                '\n' -> {
-                    completeValue()
-                    completeRow()
-                    BeforeValue
-                }
-                else -> {
-                    value.append(char)
-                    when (nextChar()) {
-                        ',' -> {
-                            pos++
-                            completeValue()
-                            when (nextChar()) {
-                                null -> { // EOF
-                                    completeValue()
-                                    completeRow()
-                                }
-                            }
-                            BeforeValue
-                        }
-                        '\r' -> {
-                            pos++
-                            when (nextChar()) {
-                                '\n' -> {
-                                    pos++
-                                }
-                            }
-                            completeValue()
-                            completeRow()
-                            BeforeValue
-                        }
-                        '\n' -> {
-                            pos++
-                            completeValue()
-                            completeRow()
-                            BeforeValue
-                        }
-                        null -> {
-                            completeValue()
-                            completeRow()
-                            BeforeValue
-                        }
-                        else -> {
-                            InsideValue
-                        }
-                    }
-                }
-            }
-            InsideEscapedValue -> when (char) {
+            QuotedValue -> when (char) {
                 '"' -> when (nextChar()) {
                     '"' -> {
                         pos++
                         value.append(char)
-                        InsideEscapedValue
+                        QuotedValue
                     }
-                    else -> {
+                    else -> { // Quote closed, value complete
                         completeValue()
                         when (nextChar()) {
                             ',' -> {
                                 pos++
+                                valueStarted = true
+                            }
+                            '\r' -> {
+                                pos++
+                                if (nextChar() == '\n') {
+                                    pos++
+                                }
+                                completeRow()
+                            }
+                            '\n' -> {
+                                pos++
+                                completeRow()
                             }
                             null -> {
                                 completeRow()
                             }
                         }
-                        BeforeValue
+                        SimpleValue
                     }
                 }
                 else -> {
                     value.append(char)
-                    InsideEscapedValue
+                    QuotedValue
                 }
             }
         }
         pos++
     }
 
-    if (value.isNotEmpty()) {
+    if (valueStarted) {
         completeValue()
     }
 
@@ -164,7 +129,6 @@ internal fun parseCsv(
 }
 
 private enum class Lexer {
-    BeforeValue,
-    InsideValue,
-    InsideEscapedValue,
+    SimpleValue,
+    QuotedValue,
 }

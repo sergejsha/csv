@@ -36,7 +36,7 @@ class ReadmeExampleTest {
 
         // (2) csv to text
         val csvText = csv.toCsvText()
-        assertEquals("Code,Name\nDE,Deutschland\nBY,Belarus\n", csvText)
+        assertEquals("Code,Name\nDE,Deutschland\nBY,Belarus", csvText)
 
         // (3) parse csv text
         val csv2 = CsvWithHeader.fromCsvText(csvText) as CsvWithHeader
@@ -53,6 +53,6 @@ class ReadmeExampleTest {
                 }
             }
         )
-        assertEquals("Code,Name\nDE,Deutschland\nBY,Weißrussland\n", csv3.toCsvText())
+        assertEquals("Code,Name\nDE,Deutschland\nBY,Weißrussland", csv3.toCsvText())
     }
 }

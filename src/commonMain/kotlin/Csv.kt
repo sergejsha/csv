@@ -16,13 +16,15 @@ public abstract class Csv(
      *
      * @param newLine the line separator to use
      * @param escapeWhitespaces whether to escape whitespaces in values
+     * @param trailingNewLine whether to add a newline character after the last row
      * @return the CSV-formatted string representation
      */
     public fun toCsvText(
         newLine: NewLine = NewLine.LF,
         escapeWhitespaces: Boolean = false,
+        trailingNewLine: Boolean = false,
     ): String = buildString {
-        allRows.forEach { row ->
+        allRows.forEachIndexed { index, row ->
             row.forEachIndexed { index, value ->
                 val escapedValue = value.escapeCsvValue(escapeWhitespaces)
                 append(escapedValue)
@@ -30,7 +32,9 @@ public abstract class Csv(
                     append(',')
                 }
             }
-            append(newLine.value)
+            if (index != allRows.lastIndex || trailingNewLine) {
+                append(newLine.value)
+            }
         }
     }
 }
