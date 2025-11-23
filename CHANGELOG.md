@@ -1,5 +1,9 @@
 # Changelog
 
+## 1.3 - 2025.11.23
+
+- Issue #35: Trailing empty fields are not handled properly
+
 ## 1.2 - 2025.11.20
 
 - Issue #33: Fix parsing when fields are quoted and rows are terminated with CRLF
