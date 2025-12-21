@@ -9,6 +9,7 @@ import java.util.Base64
 plugins {
     alias(libs.plugins.kotlin.multiplatform)
     alias(libs.plugins.dokka)
+    alias(libs.plugins.dependencyUpdates)
     id("signing")
     id("maven-publish")
 }
@@ -160,3 +161,18 @@ if (canSignArtifacts) {
 
 private fun Project.getPropertyOrEmpty(name: String): String =
     if (hasProperty(name)) property(name) as String? ?: "" else ""
+
+// -- START: Check version only accepts stable versions
+private val instableVersionRegex = "[0-9,.v-]+(-r)?(.*)".toRegex()
+private fun isNonStable(version: String): Boolean {
+    val stableKeyword = listOf("RELEASE", "FINAL", "GA").any { version.uppercase().contains(it) }
+    return !stableKeyword && !instableVersionRegex.matches(version)
+}
+
+tasks.withType<com.github.benmanes.gradle.versions.updates.DependencyUpdatesTask> {
+    rejectVersionIf {
+        isNonStable(candidate.version) && !isNonStable(currentVersion)
+    }
+    gradleReleaseChannel = "stable"
+}
+// -- END
