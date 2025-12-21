@@ -163,10 +163,10 @@ private fun Project.getPropertyOrEmpty(name: String): String =
     if (hasProperty(name)) property(name) as String? ?: "" else ""
 
 // -- START: Check version only accepts stable versions
-private val instableVersionRegex = "[0-9,.v-]+(-r)?(.*)".toRegex()
+private val unstableVersionRegex = "[0-9,.v-]+(-r)?(.*)".toRegex()
 private fun isNonStable(version: String): Boolean {
     val stableKeyword = listOf("RELEASE", "FINAL", "GA").any { version.uppercase().contains(it) }
-    return !stableKeyword && !instableVersionRegex.matches(version)
+    return !stableKeyword && !unstableVersionRegex.matches(version)
 }
 
 tasks.withType<com.github.benmanes.gradle.versions.updates.DependencyUpdatesTask> {
