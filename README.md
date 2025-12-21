@@ -69,7 +69,7 @@ assertEquals("Code,Name\nDE,Deutschland\nBY,Weißrussland\n", csv3.toCsvText())
 In `gradle/libs.versions.toml`
 ```toml
 [versions]
-kotlin = "2.2.0"
+kotlin = "2.3.0"
 csv = "1.3"
 
 [libraries]
