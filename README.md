@@ -1,11 +1,13 @@
 [![Maven Central](http://img.shields.io/maven-central/v/de.halfbit/csv.svg)](https://central.sonatype.com/artifact/de.halfbit/csv)
 ![maintenance-status](https://img.shields.io/badge/maintenance-passively--maintained-yellowgreen.svg)
 
-Feel free to open PRs for features you miss, please remember keeping API minimalistic, predictable and self-explanatory.
+# CSV
 
-# 🗂 CSV ️
+A tiny, fast Kotlin Multiplatform library for parsing and building CSV strings. Zero dependencies, explicit API, and predictable behavior.
 
-Small, fast and convenient multiplatform CSV parser and builder written for one of my projects, and then shared with awesome Kotlin community.
+**Platforms:** JVM, JS (Browser/Node), iOS, macOS, Linux, Windows
+
+Contributions welcome — please keep the API minimalistic and self-explanatory.
 
 # Architecture
 
@@ -13,10 +15,9 @@ Small, fast and convenient multiplatform CSV parser and builder written for one 
 
 # Usage
 
-Here is what you can do with the library:
-```kotlin
+### Build CSV
 
-// (1) build csv
+```kotlin
 val csv = buildCsv {
     header {
         column("Code")
@@ -31,42 +32,56 @@ val csv = buildCsv {
         value("Belarus")
     }
 } as CsvWithHeader
+```
 
-val code = csv.header.columnByName("Code") as CsvColumn
-val name = csv.header.columnByName("Name") as CsvColumn
+### Access columns and values
 
-assertEquals(code, CsvColumn(0, "Code"))
-assertEquals(name, CsvColumn(1, "Name"))
-assertEquals(csv.data[0][code.index], "DE")
-assertEquals(csv.data[0][name.index], "Deutschland")
-assertEquals(csv.data[1][code.index], "BY")
-assertEquals(csv.data[1][name.index], "Belarus")
+```kotlin
+val code = csv.header.columnByName("Code")!!  // CsvColumn(index=0, name="Code")
+val name = csv.header.columnByName("Name")!!  // CsvColumn(index=1, name="Name")
 
-// (2) csv to text
-val csvText = csv.toCsvText()
-assertEquals("Code,Name\nDE,Deutschland\nBY,Belarus\n", csvText)
+csv.data[0][code]  // "DE"
+csv.data[0][name]  // "Deutschland"
+csv.data[1][code]  // "BY"
+csv.data[1][name]  // "Belarus"
+```
 
-// (3) parse csv text
-val csv2 = CsvWithHeader.fromCsvText(csvText) as CsvWithHeader
+### Convert to CSV text
 
-assertEquals(csv.header, csv2.header)
-assertEquals(csv.data, csv2.data)
-assertEquals(csv.allRows, csv2.allRows)
+```kotlin
+val text = csv.toCsvText()
+// "Code,Name\nDE,Deutschland\nBY,Belarus\n"
 
-// (4) transform csv
-val csv3 = csv.copy(
+// With CRLF line endings:
+csv.toCsvText(newLine = NewLine.CRLF)
+```
+
+### Parse CSV text
+
+```kotlin
+// With header row:
+val csv = CsvWithHeader.fromCsvText("Code,Name\nDE,Deutschland\n")
+
+// Without header row:
+val csv = CsvNoHeader.fromCsvText("DE,Deutschland\nBY,Belarus\n")
+```
+
+### Transform data
+
+```kotlin
+val transformed = csv.copy(
     data = csv.data.map { row ->
         row.mapValueOf(name) { value ->
             if (value == "Belarus") "Weißrussland" else value
         }
     }
 )
-assertEquals("Code,Name\nDE,Deutschland\nBY,Weißrussland\n", csv3.toCsvText())
 ```
 
 # Dependencies
 
 In `gradle/libs.versions.toml`
+
 ```toml
 [versions]
 kotlin = "2.3.0"
@@ -80,6 +95,7 @@ kotlin-multiplatform = { id = "org.jetbrains.kotlin.multiplatform", version.ref 
 ```
 
 In `shared/build.gradle.kts`
+
 ```kotlin
 plugins {
     alias(libs.plugins.kotlin.multiplatform)
@@ -100,8 +116,9 @@ kotlin {
 2. `./gradlew clean build releaseToMavenCentral`
 
 # License
+
 ```
-Copyright 2023-2025 Sergej Shafarenka, www.halfbit.de
+Copyright 2023-2026 Sergej Shafarenka, www.halfbit.de
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
