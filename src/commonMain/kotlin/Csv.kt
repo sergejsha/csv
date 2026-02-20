@@ -69,7 +69,10 @@ private fun String.escapeCsvValue(
 ): String =
     when {
         isEmpty() -> "\"\""
-        contains(",") || contains("\n") || (escapeWhitespaces && contains(" ")) -> {
+        contains(",") ||
+                contains("\n") ||
+                contains("\r") ||
+                (escapeWhitespaces && contains(" ")) -> {
             val escapedQuoted = replace("\"", "\"\"")
             "\"${escapedQuoted}\""
         }
